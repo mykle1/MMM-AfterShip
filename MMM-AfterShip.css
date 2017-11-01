@@ -1,0 +1,30 @@
+/* Copy and paste any or all of these css entries into your custom.css file inside your
+ * css folder. The functions are annotated to make things as easy as possible for you.
+ * Use any colors you want! For example - "http://htmlcolorcodes.com/color-picker/"
+ * Pick your color, copy and paste the HEX number. Example - #62FF00 = bright green.
+ */
+
+ .MMM-AfterShip .header {
+  color: #62FF00;             /* Color the title text. Default is white. */
+}
+
+.MMM-AfterShip .origin {
+  color: yellow;             /* Color the origin text. Default is white. */
+  /*  display: none; */         /* Uncomment if you don't want origin text */
+}
+
+.MMM-AfterShip .destination {
+  color: #62FF00;             /* Color the destination text. Default is white. */
+  /*  display: none; */         /* Uncomment if you don't want destination text */
+}
+
+.MMM-AfterShip .lastUpdate {
+  color: #FFFFFF;             /* Color the lastUpdate. Default is white. */
+/*  display: none; */         /* Uncomment if you don't want lastUpdate */
+}
+
+.MMM-AfterShip .trackings {
+  color: #62FF00;             /* Color the trackings. Default is white. */
+
+/*  display: none; */         /* Uncomment if you don't want trackings */
+}
