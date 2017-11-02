@@ -21,21 +21,24 @@ module.exports = NodeHelper.create({
             url: "https://api.aftership.com/v4/trackings",
             method: 'GET',
 			headers: {
-				'aftership-api-key': '4d671d76-5294-44a2-ba35-7f9350bf94cf',
+				'aftership-api-key': '',
 				'Content-Type': 'application/json'
 			}
 			
         }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
-                var result = JSON.parse(body).data;
-				console.log(response.statusCode + result); // check
+                var result = JSON.parse(body).data.trackings;
+				console.log(result); // check
                 this.sendSocketNotification('AFTERSHIP_RESULT', result);
+        
             }
         });
     },
 
     socketNotificationReceived: function(notification, payload) {
-        if (notification === 'GET_AFTERSHIP') {
+    	 if (notification === "CONFIG") {
+            this.config = payload;
+			} else if (notification === 'GET_AFTERSHIP') {
             this.getAfterShip(payload);
         }
     }
