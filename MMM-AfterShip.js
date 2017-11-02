@@ -8,15 +8,15 @@ Module.register("MMM-AfterShip", {
 
     // Module config defaults.           // Make all changes in your config.js file
     defaults: {
-// 		apiKey: "",                      // Your API Key
-        useHeader: false,                 // false if you don't want a header      
+ 		apiKey: '',                      // Your fre API Key from aftership.com
+        useHeader: false,                // false if you don't want a header      
         header: "",                      // Change in config file. useHeader must be true
         maxWidth: "300px",
         animationSpeed: 3000,            // fade speed
         initialLoadDelay: 3250,
         retryDelay: 2500,
-        rotateInterval: 20 * 1000,   // 5 minutes
-        updateInterval: 30 * 60 * 1000,  
+        rotateInterval: 20 * 1000,       // 5 minutes
+        updateInterval: 10 * 60 * 1000,  // 10 minutes
 
     },
 
@@ -59,13 +59,13 @@ Module.register("MMM-AfterShip", {
 		
 		
 	//	Rotating my data
-//		var AfterShip = this.AfterShip;
-//		var AfterShipKeys = Object.keys(this.AfterShip);
-//        if (AfterShipKeys.length > 0) {
-//            if (this.activeItem >= AfterShipKeys.length) {
-//                this.activeItem = 0;
-//            }
-//            var AfterShip = this.AfterShip[AfterShipKeys[this.activeItem]];
+		var AfterShip = this.AfterShip;
+		var AfterShipKeys = Object.keys(this.AfterShip);
+        if (AfterShipKeys.length > 0) {
+            if (this.activeItem >= AfterShipKeys.length) {
+                this.activeItem = 0;
+            }
+        var AfterShip = this.AfterShip[AfterShipKeys[this.activeItem]];
 		
 //		console.log(this.AfterShip); // for checking
 	
@@ -73,49 +73,33 @@ Module.register("MMM-AfterShip", {
         var top = document.createElement("div");
         top.classList.add("list-row");
 		
-		
-		// origin
-//        var origin = document.createElement("div");
- //       origin.classList.add("xsmall", "bright", "origin");
- //       origin.innerHTML = "Origin: " + this.origin;
- //       wrapper.appendChild(origin);
-		
-		
-//		// destination
-//        var destination = document.createElement("div");
- //       destination.classList.add("xsmall", "bright", "destination");
-//        destination.innerHTML = "Destination: " + this.destination;
- //       wrapper.appendChild(destination);
-		
-		
-		
-		
+		// My data begins here
 		
         // ID
         var ID = document.createElement("div");
         ID.classList.add("xsmall", "bright", "ID");
-        ID.innerHTML = "ID # : " + this.trackings[0].id;
+        ID.innerHTML = "ID # : " + AfterShip.id;
         wrapper.appendChild(ID);
 		
 		
 		// Last update
         var lastUpdate = document.createElement("div");
         lastUpdate.classList.add("xsmall", "bright", "lastUpdate");
-        lastUpdate.innerHTML = "Last update: " + this.trackings[0].last_updated_at;
+        lastUpdate.innerHTML = "Last update: " + AfterShip.last_updated_at;
         wrapper.appendChild(lastUpdate);
 		
 		
 		// tracking number
         var tracking_number = document.createElement("div");
         tracking_number.classList.add("xsmall", "bright", "tracking_number");
-        tracking_number.innerHTML = "Tracking #: " + this.trackings[0].tracking_number;
+        tracking_number.innerHTML = "Tracking #: " + AfterShip.tracking_number;
         wrapper.appendChild(tracking_number);
 		
 		
 		// Courier
         var slug = document.createElement("div");
         slug.classList.add("xsmall", "bright", "courier");
-        slug.innerHTML = "Courier: " + this.trackings[0].slug;
+        slug.innerHTML = "Courier: " + AfterShip.slug;
         wrapper.appendChild(slug);
 		
 		
@@ -123,50 +107,45 @@ Module.register("MMM-AfterShip", {
 		// expected_delivery
         var expected_delivery = document.createElement("div");
         expected_delivery.classList.add("xsmall", "bright", "expected_delivery");
-        expected_delivery.innerHTML = "Expected delivery on: " + this.trackings[0].expected_delivery;
+        expected_delivery.innerHTML = "Expected delivery on: " + AfterShip.expected_delivery;
         wrapper.appendChild(expected_delivery);
 		
 		
 		// shipment_type
         var shipment_type = document.createElement("div");
         shipment_type.classList.add("xsmall", "bright", "shipment_type");
-        shipment_type.innerHTML = "Shipping: " + this.trackings[0].shipment_type;
+        shipment_type.innerHTML = "Shipping: " + AfterShip.shipment_type;
         wrapper.appendChild(shipment_type);
 		
 		
 		// status
         var tag = document.createElement("div");
         tag.classList.add("xsmall", "bright", "status");
-        tag.innerHTML = "Status: " + this.trackings[0].tag;
+        tag.innerHTML = "Status: " + AfterShip.tag;
         wrapper.appendChild(tag);
 		
 		
 		// Title
         var Title = document.createElement("div");
         Title.classList.add("xsmall", "bright", "Title");
-        Title.innerHTML = "Title: " + this.trackings[0].title;
+        Title.innerHTML = "Title: " + AfterShip.title;
         wrapper.appendChild(Title);
-		
-		
-		
-		
-		
-		
-		
-//		}  // closes rotation 
+			
+		}  // <-- closes rotation 
 		
         return wrapper;
-    },
+		
+    }, // <-- closes getDom
 
 
     processAfterShip: function(data) {
         this.AfterShip = data;
-		console.log(this.AfterShip);
+//		console.log(this.AfterShip);
         this.loaded = true;
     },
 
     scheduleCarousel: function() {
-        console.log("Carousel of AfterShip fucktion!");
+//        console.log("Carousel of AfterShip fucktion!");
         this.rotateInterval = setInterval(() => {
             this.activeItem++;
             this.updateDom(this.config.animationSpeed);

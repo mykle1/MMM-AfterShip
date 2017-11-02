@@ -8,23 +8,39 @@
   color: #62FF00;             /* Color the title text. Default is white. */
 }
 
-.MMM-AfterShip .origin {
-  color: yellow;             /* Color the origin text. Default is white. */
-  /*  display: none; */         /* Uncomment if you don't want origin text */
-}
-
-.MMM-AfterShip .destination {
-  color: #62FF00;             /* Color the destination text. Default is white. */
-  /*  display: none; */         /* Uncomment if you don't want destination text */
-}
-
-.MMM-AfterShip .lastUpdate {
-  color: #FFFFFF;             /* Color the lastUpdate. Default is white. */
+.MMM-AfterShip .ID {
+  color: #FFFFFF;             /* Color the ID #. Default is white. */
 /*  display: none; */         /* Uncomment if you don't want lastUpdate */
 }
 
-.MMM-AfterShip .trackings {
-  color: #62FF00;             /* Color the trackings. Default is white. */
+.MMM-AfterShip .lastUpdate {
+  color: #FFFFFF;             /* Color the Last update. Default is white. */
+}
 
-/*  display: none; */         /* Uncomment if you don't want trackings */
+.MMM-AfterShip .tracking_number {
+  color: #FFFFFF;             /* Color the tracking #. Default is white. */
+}
+
+.MMM-AfterShip .courier {
+  color: #FFFFFF;             /* Color the courier. Default is white. */
+}
+
+.MMM-AfterShip .expected_delivery {
+  color: #FFFFFF;             /* Color the expected_delivery. Default is white. */
+}
+
+.MMM-AfterShip .shipment_type {
+  color: #FFFFFF;             /* Color the shipment_type. Default is white. */
+}
+
+.MMM-AfterShip .status {
+  color: #FFFFFF;             /* Color the status. Default is white. */
+}
+
+.MMM-AfterShip .status {
+  color: #FFFFFF;             /* Color the status. Default is white. */
+}
+
+.MMM-AfterShip .Title {
+  color: #FFFFFF;             /* Color the Title. Default is white. */
 }
