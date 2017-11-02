@@ -1,14 +1,8 @@
-/* Magic Mirror
- * Module: MMM-AfterShip
- *
- * By Mykle1
- *
- */
 Module.register("MMM-AfterShip", {
 
     // Module config defaults.           // Make all changes in your config.js file
     defaults: {
-//		apiKey: "",                      // Your API Key
+// 		apiKey: "",                      // Your API Key
         useHeader: false,                 // false if you don't want a header      
         header: "",                      // Change in config file. useHeader must be true
         maxWidth: "300px",
@@ -159,11 +153,8 @@ Module.register("MMM-AfterShip", {
 
 
     processAfterShip: function(data) {
-        this.AfterShip = data.data;
-		this.origin = data.origin;
-		this.destination = data.destination;
-		this.trackings = data.trackings;
-		this.last_updated_at = data.last_updated_at;
+        this.AfterShip = data;
+		console.log(this.AfterShip);
         this.loaded = true;
     },
 
