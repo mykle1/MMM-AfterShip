@@ -10,7 +10,7 @@
 
 .MMM-AfterShip .ID {
   color: #FFFFFF;             /* Color the ID #. Default is white. */
-/*  display: none; */         /* Uncomment if you don't want lastUpdate */
+/*  display: none; */         /* Uncomment if you don't want ID */
 }
 
 .MMM-AfterShip .lastUpdate {
