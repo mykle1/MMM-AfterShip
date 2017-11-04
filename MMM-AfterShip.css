@@ -55,3 +55,21 @@
   font-size: 16px;             /* Adjust to your liking, line by line */
   /*  display: none; */         /* Uncomment if you don't want Title */
 }
+
+.MMM-AfterShip .location {
+  color: #62FF00;             /* Color the location. Default is white. */
+  font-size: 18px;             /* Adjust to your liking, line by line */
+  /*  display: none; */         /* Uncomment if you don't want location */
+}
+
+.MMM-AfterShip .checkpoint_time {
+  color: #62FF00;             /* Color the checkpoint_time. Default is white. */
+  font-size: 18px;             /* Adjust to your liking, line by line */
+  /*  display: none; */         /* Uncomment if you don't want checkpoint_time */
+}
+
+.MMM-AfterShip .message {
+  color: #62FF00;             /* Color the message. Default is white. */
+  font-size: 18px;             /* Adjust to your liking, line by line */
+  /*  display: none; */         /* Uncomment if you don't want message */
+}

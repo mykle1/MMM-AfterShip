@@ -8,14 +8,14 @@ Module.register("MMM-AfterShip", {
 
     // Module config defaults.           // Make all changes in your config.js file
     defaults: {
- 		apiKey: '',                      // Your fre API Key from aftership.com
+ 		apiKey: '',                      // Your free API Key from aftership.com
         useHeader: false,                // false if you don't want a header      
         header: "",                      // Change in config file. useHeader must be true
         maxWidth: "300px",
         animationSpeed: 3000,            // fade speed
         initialLoadDelay: 3250,
         retryDelay: 2500,
-        rotateInterval: 20 * 1000,       // 5 minutes
+        rotateInterval: 30 * 1000,       // 30 second rotation of items
         updateInterval: 10 * 60 * 1000,  // 10 minutes
 
     },
@@ -68,46 +68,47 @@ Module.register("MMM-AfterShip", {
         var AfterShip = this.AfterShip[AfterShipKeys[this.activeItem]];
 		
 //		console.log(this.AfterShip); // for checking
-	
+
+
 
         var top = document.createElement("div");
         top.classList.add("list-row");
 		
+
 		// My data begins here
 		
-        // ID
+        // ID of shipment
         var ID = document.createElement("div");
         ID.classList.add("xsmall", "bright", "ID");
         ID.innerHTML = "ID # : " + AfterShip.id;
         wrapper.appendChild(ID);
 		
 		
-		// Last update
+		// Last update on shipment
         var lastUpdate = document.createElement("div");
         lastUpdate.classList.add("xsmall", "bright", "lastUpdate");
-        lastUpdate.innerHTML = "Last update: " + AfterShip.last_updated_at;
+		lastUpdate.innerHTML = "Last update: " + moment(AfterShip.last_updated_at).local().format("ddd, MMM DD, YYYY, h:mm a"); 
         wrapper.appendChild(lastUpdate);
 		
 		
-		// tracking number
+		// tracking number of shipment
         var tracking_number = document.createElement("div");
         tracking_number.classList.add("xsmall", "bright", "tracking_number");
         tracking_number.innerHTML = "Tracking #: " + AfterShip.tracking_number;
         wrapper.appendChild(tracking_number);
 		
 		
-		// Courier
+		// Courier name
         var slug = document.createElement("div");
         slug.classList.add("xsmall", "bright", "courier");
         slug.innerHTML = "Courier: " + AfterShip.slug;
         wrapper.appendChild(slug);
 		
 		
-		
-		// expected_delivery
+		// expected_delivery date
         var expected_delivery = document.createElement("div");
         expected_delivery.classList.add("xsmall", "bright", "expected_delivery");
-        expected_delivery.innerHTML = "Expected delivery on: " + AfterShip.expected_delivery;
+        expected_delivery.innerHTML = "Expected delivery on: " + moment(AfterShip.expected_delivery).local().format("ddd, MMM DD, YYYY");
         wrapper.appendChild(expected_delivery);
 		
 		
@@ -118,20 +119,41 @@ Module.register("MMM-AfterShip", {
         wrapper.appendChild(shipment_type);
 		
 		
-		// status
+		// status oh shipment
         var tag = document.createElement("div");
         tag.classList.add("xsmall", "bright", "status");
         tag.innerHTML = "Status: " + AfterShip.tag;
         wrapper.appendChild(tag);
 		
 		
-		// Title
+		// Title of shipment (if any)
         var Title = document.createElement("div");
         Title.classList.add("xsmall", "bright", "Title");
         Title.innerHTML = "Title: " + AfterShip.title;
         wrapper.appendChild(Title);
+		
+		
+		// checkpoint location
+        var location = document.createElement("div");
+        location.classList.add("xsmall", "bright", "location");
+        location.innerHTML = "Where: " + AfterShip.checkpoints[0].location;
+        wrapper.appendChild(location);
+		
+		
+		// checkpoint_time
+        var checkpoint_time = document.createElement("div");
+        checkpoint_time.classList.add("xsmall", "bright", "checkpoint_time");
+        checkpoint_time.innerHTML = "When: " + moment(AfterShip.checkpoints[0].checkpoint_time).local().format("ddd, MMM DD, YYYY, h:mm a");
+        wrapper.appendChild(checkpoint_time);
+		
+		
+		// message from checkpoint
+        var message = document.createElement("div");
+        message.classList.add("xsmall", "bright", "message");
+        message.innerHTML = "Message: " + AfterShip.checkpoints[0].message;
+        wrapper.appendChild(message);
 			
-		}  // <-- closes rotation 
+	}  // <-- closes rotation 
 		
         return wrapper;
 		
@@ -140,12 +162,12 @@ Module.register("MMM-AfterShip", {
 
     processAfterShip: function(data) {
         this.AfterShip = data;
-//		console.log(this.AfterShip);
+	//	console.log(this.AfterShip);
         this.loaded = true;
     },
 
     scheduleCarousel: function() {
-//        console.log("Carousel of AfterShip fucktion!");
+    //  console.log("Carousel of AfterShip fucktion!");
         this.rotateInterval = setInterval(() => {
             this.activeItem++;
             this.updateDom(this.config.animationSpeed);

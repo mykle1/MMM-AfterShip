@@ -28,7 +28,7 @@ module.exports = NodeHelper.create({
         }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
                 var result = JSON.parse(body).data.trackings;
-			//	console.log(result); // check
+		//		console.log(result); // check
                 this.sendSocketNotification('AFTERSHIP_RESULT', result);
         
             }
