@@ -56,6 +56,9 @@ Module.register("MMM-AfterShip", {
             header.innerHTML = this.config.header;
             wrapper.appendChild(header);
         }
+		
+		// If there are deliveries pending, go through all the data
+		if (this.AfterShip.length != 0){
 
 
         //	Rotating my data
@@ -66,7 +69,7 @@ Module.register("MMM-AfterShip", {
                 this.activeItem = 0;
             }
             var AfterShip = this.AfterShip[AfterShipKeys[this.activeItem]];
-            var checkpoints = AfterShip['checkpoints'];
+            var checkpoints = AfterShip['checkpoints']; // another array inside the first array
             //	console.log(checkpoints); // for checking
             //	console.log(this.AfterShip); // for checking
 
@@ -144,7 +147,7 @@ Module.register("MMM-AfterShip", {
             var location = document.createElement("div");
             location.classList.add("xsmall", "bright", "location");
             if (AfterShip.checkpoints.length != 0) {
-                location.innerHTML = "Location: " + AfterShip.checkpoints[checkpoints.length - 1].message; // only the last object in the array = checkpoints[checkpoints.length -1] //
+                location.innerHTML = "Location: " + AfterShip.checkpoints[checkpoints.length - 1].location; // only the last object in the array = checkpoints[checkpoints.length -1] //
                 wrapper.appendChild(location);
             } else {
                 location.innerHTML = "Location: Who the fuck knows!";
@@ -182,12 +185,35 @@ Module.register("MMM-AfterShip", {
 
         return wrapper;
 
+		} else { // From deliveries pending if statement above
+			
+			// When there are no pending deliveries, do the following
+			var top = document.createElement("div");
+            top.classList.add("list-row");
+
+            // When no deliveries are pending
+            var nothing = document.createElement("div");
+            nothing.classList.add("small", "bright", "nothing");
+            nothing.innerHTML = "No deliveries pending!";
+            wrapper.appendChild(nothing);
+			
+			// Current date and time (wherever you are)
+            var date = document.createElement("div");
+            date.classList.add("small", "bright", "date");
+            date.innerHTML = moment().local().format("ddd, MMM DD, YYYY, h:mm a");
+            wrapper.appendChild(date);
+		
+		} // Closes else statement from deliveries pending if statement above
+
+		
+		return wrapper;	
+		
     }, // <-- closes getDom
 
 
     processAfterShip: function(data) {
         this.AfterShip = data;
-    //    console.log(this.AfterShip); // for checking //
+        console.log(this.AfterShip); // for checking //
         this.loaded = true;
     },
 
