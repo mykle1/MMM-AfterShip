@@ -213,7 +213,7 @@ Module.register("MMM-AfterShip", {
 
     processAfterShip: function(data) {
         this.AfterShip = data;
-        console.log(this.AfterShip); // for checking //
+    //    console.log(this.AfterShip); // for checking //
         this.loaded = true;
     },
 
