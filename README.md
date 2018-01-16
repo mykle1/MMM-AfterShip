@@ -39,6 +39,8 @@ multiple deliveries coming by multiple couriers.
             maxWidth: "300px",
             animationSpeed: 3000,              // fade speed
             rotateInterval: 30 * 1000,         // seconds between shipments
+            dateTimeFormat: "ddd, MMM DD, YYYY, h:mm a",
+            dateFormat: "ddd, MMM DD, YYYY"
         }
     },
 
