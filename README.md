@@ -28,17 +28,18 @@ multiple deliveries coming by multiple couriers.
 ## Config.js entry and options
 
     {
-		disabled: false,
-		module: "MMM-AfterShip",
-		position: "top_left",
-		config: {
-			apiKey: "Your API Key GOES HERE",  // Your free API Key from aftership.com
-			useHeader: true,                   // False if you don't want a header      
-            	header: "Aftership Tracking",      // Change in config file. useHeader must be true
-            	maxWidth: "300px",
-            	animationSpeed: 3000,              // fade speed
-            	rotateInterval: 30 * 1000,         // seconds between shipments
-		}
-	},
+        disabled: false,
+        module: "MMM-AfterShip",
+        position: "top_left",
+        config: {
+            apiKey: "Your API Key GOES HERE",  // Your free API Key from aftership.com
+            apiLanguage: "en",                 // Your free API Key from aftership.com
+            useHeader: true,                   // False if you don't want a header      
+            header: "Aftership Tracking",      // Change in config file. useHeader must be true
+            maxWidth: "300px",
+            animationSpeed: 3000,              // fade speed
+            rotateInterval: 30 * 1000,         // seconds between shipments
+        }
+    },
 
 ## Is there a module that SpaceCowboysDude hasn't fixed for you, Mykle? :^)

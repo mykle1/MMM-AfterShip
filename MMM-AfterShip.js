@@ -17,7 +17,7 @@ Module.register("MMM-AfterShip", {
         retryDelay: 2500,
         rotateInterval: 30 * 1000, // 30 second rotation of items
         updateInterval: 10 * 60 * 1000, // 10 minutes
-
+        apiLanguage: "en"
     },
 
     getStyles: function() {
