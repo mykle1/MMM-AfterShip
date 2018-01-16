@@ -17,7 +17,9 @@ Module.register("MMM-AfterShip", {
         retryDelay: 2500,
         rotateInterval: 30 * 1000, // 30 second rotation of items
         updateInterval: 10 * 60 * 1000, // 10 minutes
-        apiLanguage: "en"
+        apiLanguage: "en",
+        dateTimeFormat: "ddd, MMM DD, YYYY, h:mm a",
+        dateFormat: "ddd, MMM DD, YYYY"
     },
 
     getStyles: function() {
@@ -89,7 +91,7 @@ Module.register("MMM-AfterShip", {
             // Last update on shipment
             var lastUpdate = document.createElement("div");
             lastUpdate.classList.add("xsmall", "bright", "lastUpdate");
-            lastUpdate.innerHTML = "Last update: " + moment(AfterShip.last_updated_at).local().format("ddd, MMM DD, YYYY, h:mm a");
+            lastUpdate.innerHTML = "Last update: " + moment(AfterShip.last_updated_at).local().format(this.config.dateTimeFormat);
             wrapper.appendChild(lastUpdate);
 
 
@@ -111,7 +113,7 @@ Module.register("MMM-AfterShip", {
             var expected_delivery = document.createElement("div");
             expected_delivery.classList.add("xsmall", "bright", "expected_delivery");
             if (AfterShip.expected_delivery != null) {
-                expected_delivery.innerHTML = "Expected delivery on: " + moment(AfterShip.expected_delivery).local().format("ddd, MMM DD, YYYY");
+                expected_delivery.innerHTML = "Expected delivery on: " + moment(AfterShip.expected_delivery).local().format(this.config.dateFormat);
                 wrapper.appendChild(expected_delivery);
             } else {
                 expected_delivery.innerHTML = "No expected delivery date!";
@@ -160,7 +162,7 @@ Module.register("MMM-AfterShip", {
             var checkpoint_time = document.createElement("div");
             checkpoint_time.classList.add("xsmall", "bright", "checkpoint_time");
             if (AfterShip.checkpoints.length != 0) {
-                checkpoint_time.innerHTML = "When: " + moment(AfterShip.checkpoints[checkpoints.length - 1].checkpoint_time).local().format("ddd, MMM DD, YYYY, h:mm a");
+                checkpoint_time.innerHTML = "When: " + moment(AfterShip.checkpoints[checkpoints.length - 1].checkpoint_time).local().format(this.config.dateTimeFormat);
                 wrapper.appendChild(checkpoint_time);
             } else {
                 checkpoint_time.innerHTML = "When: Who the fuck cares!";
@@ -200,7 +202,7 @@ Module.register("MMM-AfterShip", {
 			// Current date and time (wherever you are)
             var date = document.createElement("div");
             date.classList.add("small", "bright", "date");
-            date.innerHTML = moment().local().format("ddd, MMM DD, YYYY, h:mm a");
+            date.innerHTML = moment().local().format(this.config.dateTimeFormat);
             wrapper.appendChild(date);
 		
 		} // Closes else statement from deliveries pending if statement above
