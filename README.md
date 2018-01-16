@@ -33,7 +33,7 @@ multiple deliveries coming by multiple couriers.
         position: "top_left",
         config: {
             apiKey: "Your API Key GOES HERE",  // Your free API Key from aftership.com
-            apiLanguage: "en",                 // Your free API Key from aftership.com
+            apiLanguage: "en",
             useHeader: true,                   // False if you don't want a header      
             header: "Aftership Tracking",      // Change in config file. useHeader must be true
             maxWidth: "300px",
