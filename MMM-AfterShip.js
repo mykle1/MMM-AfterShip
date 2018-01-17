@@ -81,6 +81,12 @@ Module.register("MMM-AfterShip", {
             var top = document.createElement("div");
             top.classList.add("list-row");
 
+            // Title of shipment (if any)
+            var Title = document.createElement("div");
+            Title.classList.add("xsmall", "bright", "Title");
+            Title.innerHTML = "Title: " + AfterShip.title;
+            wrapper.appendChild(Title);
+
             // ID of shipment
             var ID = document.createElement("div");
             ID.classList.add("xsmall", "bright", "ID");
@@ -136,13 +142,6 @@ Module.register("MMM-AfterShip", {
             tag.classList.add("xsmall", "bright", "status");
             tag.innerHTML = "Status: " + AfterShip.tag;
             wrapper.appendChild(tag);
-
-
-            // Title of shipment (if any)
-            var Title = document.createElement("div");
-            Title.classList.add("xsmall", "bright", "Title");
-            Title.innerHTML = "Title: " + AfterShip.title;
-            wrapper.appendChild(Title);
 
             // objects that are inside an array that is inside an object
             // checkpoint location // only the last object in the array = checkpoints[checkpoints.length -1] @Cowboysdude //
