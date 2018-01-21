@@ -18,7 +18,7 @@ module.exports = NodeHelper.create({
 
     getAfterShip: function(url) {
         request({
-            url: "https://api.aftership.com/v4/trackings",
+            url: "https://api.aftership.com/v4/trackings?lang=" + this.config.apiLanguage,
             method: 'GET',
 			headers: {
 				'aftership-api-key': this.config.apiKey,

@@ -17,7 +17,9 @@ Module.register("MMM-AfterShip", {
         retryDelay: 2500,
         rotateInterval: 30 * 1000, // 30 second rotation of items
         updateInterval: 10 * 60 * 1000, // 10 minutes
-
+        apiLanguage: "en",
+        dateTimeFormat: "ddd, MMM DD, YYYY, h:mm a",
+        dateFormat: "ddd, MMM DD, YYYY"
     },
 
     getStyles: function() {
@@ -79,6 +81,12 @@ Module.register("MMM-AfterShip", {
             var top = document.createElement("div");
             top.classList.add("list-row");
 
+            // Title of shipment (if any)
+            var Title = document.createElement("div");
+            Title.classList.add("xsmall", "bright", "Title");
+            Title.innerHTML = "Title: " + AfterShip.title;
+            wrapper.appendChild(Title);
+
             // ID of shipment
             var ID = document.createElement("div");
             ID.classList.add("xsmall", "bright", "ID");
@@ -89,7 +97,7 @@ Module.register("MMM-AfterShip", {
             // Last update on shipment
             var lastUpdate = document.createElement("div");
             lastUpdate.classList.add("xsmall", "bright", "lastUpdate");
-            lastUpdate.innerHTML = "Last update: " + moment(AfterShip.last_updated_at).local().format("ddd, MMM DD, YYYY, h:mm a");
+            lastUpdate.innerHTML = "Last update: " + moment(AfterShip.last_updated_at).local().format(this.config.dateTimeFormat);
             wrapper.appendChild(lastUpdate);
 
 
@@ -111,7 +119,7 @@ Module.register("MMM-AfterShip", {
             var expected_delivery = document.createElement("div");
             expected_delivery.classList.add("xsmall", "bright", "expected_delivery");
             if (AfterShip.expected_delivery != null) {
-                expected_delivery.innerHTML = "Expected delivery on: " + moment(AfterShip.expected_delivery).local().format("ddd, MMM DD, YYYY");
+                expected_delivery.innerHTML = "Expected delivery on: " + moment(AfterShip.expected_delivery).local().format(this.config.dateFormat);
                 wrapper.appendChild(expected_delivery);
             } else {
                 expected_delivery.innerHTML = "No expected delivery date!";
@@ -135,13 +143,6 @@ Module.register("MMM-AfterShip", {
             tag.innerHTML = "Status: " + AfterShip.tag;
             wrapper.appendChild(tag);
 
-
-            // Title of shipment (if any)
-            var Title = document.createElement("div");
-            Title.classList.add("xsmall", "bright", "Title");
-            Title.innerHTML = "Title: " + AfterShip.title;
-            wrapper.appendChild(Title);
-
             // objects that are inside an array that is inside an object
             // checkpoint location // only the last object in the array = checkpoints[checkpoints.length -1] @Cowboysdude //
             var location = document.createElement("div");
@@ -160,7 +161,7 @@ Module.register("MMM-AfterShip", {
             var checkpoint_time = document.createElement("div");
             checkpoint_time.classList.add("xsmall", "bright", "checkpoint_time");
             if (AfterShip.checkpoints.length != 0) {
-                checkpoint_time.innerHTML = "When: " + moment(AfterShip.checkpoints[checkpoints.length - 1].checkpoint_time).local().format("ddd, MMM DD, YYYY, h:mm a");
+                checkpoint_time.innerHTML = "When: " + moment(AfterShip.checkpoints[checkpoints.length - 1].checkpoint_time).local().format(this.config.dateTimeFormat);
                 wrapper.appendChild(checkpoint_time);
             } else {
                 checkpoint_time.innerHTML = "When: Who the fuck cares!";
@@ -200,7 +201,7 @@ Module.register("MMM-AfterShip", {
 			// Current date and time (wherever you are)
             var date = document.createElement("div");
             date.classList.add("small", "bright", "date");
-            date.innerHTML = moment().local().format("ddd, MMM DD, YYYY, h:mm a");
+            date.innerHTML = moment().local().format(this.config.dateTimeFormat);
             wrapper.appendChild(date);
 		
 		} // Closes else statement from deliveries pending if statement above
