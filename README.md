@@ -1,33 +1,31 @@
-## MMM-AfterShip
+## MMM-Parcel
 
-Track all your deliveries in one module. Supports 428 couriers worldwide.
+Track deliveries . Supports 428 couriers worldwide based on aftership.com
 
 ## Here's what you get
 
-A rotation of all your deliveries that are currently in transit.
-Status, estimated delivery date, which courier, tracking number, etc. . .
-UPS, FedEx, USPS, etc.. Very handy during the holiday season when you have
-multiple deliveries coming by multiple couriers.
+An compact view on parcel status, for display on Magic Mirror.
+Thanks to Mykle1 for the original code, Look and feel updated. 
 
 ## Examples
 
-* Annotated .css file included for coloring any way you like.
+IT IS NOW WORK IN PROGRESS. EXPECTED DATE FOR RELEASE 10 March 2018. 
 
-![](images/1.JPG) ![](images/2.JPG) ![](images/4.JPG) 
-
-![](images/3.JPG)
 
 ## Installation
 
-* `git clone https://github.com/mykle1/MMM-AfterShip` into the `~/MagicMirror/modules` directory.
+* `git clone https://github.com/mykle1/MMM-Parcel` into the `~/MagicMirror/modules` directory.
 
-* Get your FREE API Key from https://www.aftership.com/
+* Get an account on aftership (Free is OK)
+
+* Get your FREE API Key from https://www.aftership.com/ via settings -> API. 
 
 * You MUST add couriers to your account at aftership.com. It's easy and FREE!
 
 ## Config.js entry and options
 
     {
+    /*   THIS IS NOT VALID YET UNITL RELEASE ON MARCH 10, 2018 */
         disabled: false,
         module: "MMM-AfterShip",
         position: "top_left",
@@ -44,4 +42,4 @@ multiple deliveries coming by multiple couriers.
         }
     },
 
-## Is there a module that SpaceCowboysDude hasn't fixed for you, Mykle? :^)
+
