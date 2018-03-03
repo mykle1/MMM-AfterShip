@@ -1,45 +1,39 @@
 /* Magic Mirror
- * Module: MMM-AfterShip
+ * Module: MMM-PARCEL
  *
- * By Mykle1
+ * By MartinKooij
  *
  */
 const NodeHelper = require('node_helper');
-const request = require('request');
-
-
+const aftershipSDK = require('aftership');
 
 module.exports = NodeHelper.create({
-
+	
     start: function() {
         console.log("Starting node_helper for: " + this.name);
     },
 	
 
-    getAfterShip: function(url) {
-        request({
-            url: "https://api.aftership.com/v4/trackings?lang=" + this.config.apiLanguage,
-            method: 'GET',
-			headers: {
-				'aftership-api-key': this.config.apiKey,
-				'Content-Type': 'application/json'
-			}
+    getShipments: function() {
+        var aftershipAPI = new aftershipSDK(this.config.apiKey);
+        aftershipAPI.GET('/trackings', function(err, result) {
+			if (!err) {
+				
+//				this.sendSocketNotification('AFTERSHIP_RESULT', result);
+				console.log(Date(), result);
+				this.sendSocketNotification('AFTERSHIP_RESULT', parcelTestAnswer);				
 			
-        }, (error, response, body) => {
-            if (!error && response.statusCode == 200) {
-                var result = JSON.parse(body).data.trackings;
-		//		console.log(result); // check
-                this.sendSocketNotification('AFTERSHIP_RESULT', result);
-        
-            }
-        });
+			} else {
+				console.log(Date(), err);
+			}
+		});		
     },
 
     socketNotificationReceived: function(notification, payload) {
     	 if (notification === "CONFIG") {
             this.config = payload;
 			} else if (notification === 'GET_AFTERSHIP') {
-            this.getAfterShip(payload);
+            this.getShipments();
         }
     }
 });
