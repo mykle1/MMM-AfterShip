@@ -1,0 +1,28 @@
+{
+  "name": "MMM-Parcel",
+  "description": "Parcel Tracking via AfterShip.com for Magic Mirror 2",
+  "version": "0.9.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinkooij/MMM-Parcel"
+  },
+  "keywords": [
+    "magic mirror",
+    "smart mirror",
+    "parcel",
+	"tracking",
+	"aftership",
+    "module"
+  ],
+  "author": "Martin Kooij",
+  "contributors": [ "https://github.com/martinkooij/MMM-Parcel/graphs/contributors" ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinkooij/MMM-Parcel/issues"
+  },
+  "homepage": "https://github.com/martinkooij/MMM-Parcel#readme",
+  "dependencies": {
+    "moment": "latest",
+    "aftership": "latest"
+  }
+}

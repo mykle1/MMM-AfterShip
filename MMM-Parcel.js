@@ -10,26 +10,25 @@ Module.register("MMM-Parcel", {
 
     // Module config defaults.           // Make all changes in your config.js file
     defaults: {
-        apiKey: '', // Your free API Key from aftership.com
-        maxWidth: "350px",
-        animationSpeed: 3000,// fade speed
+        apiKey: '', 
+		animationSpeed: 2500,
 		maxNumber: 10,
 		showCourier: true,
 		autoHide: false, // not functional yet.
 		isSorted: true,
-		isCompact: true,
-		hideExpired: false,
+		isCompact: false,
+		hideExpired: true,
         updateInterval: 600000, // 10 minutes
-        parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Afgeleverd",  "Onderweg", "Ingevoerd", "Wachtend", "Te oud"],
-		parcelIconColor: ["red", "red", "blue", "blue", "green", "green", "grey", "grey"],
+		parcelStatusText: ["Exception", "Failed Attempt","In Delivery","Delivered",  "In Transit", "Info Received", "Pending", "Expired"],
+		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
 		onlyDaysFormat: 
-			{lastDay : '[gisteren]',
-			 sameDay : '[vandaag]',
-			 nextDay : '[morgen]',
-			 lastWeek : '[afgelopen] dddd',
+			{lastDay : '[Yesterday]',
+			 sameDay : '[Today]',
+			 nextDay : '[Tomorrow]',
+			 lastWeek : '[Last] dddd',
 			 nextWeek : 'dddd',
 			 sameElse : 'L'},
-		expectedDeliveryText: 'Bezorging verwacht: '
+		expectedDeliveryText: 'Delivery expected: '
     },
 
     getStyles: function () {
@@ -41,9 +40,8 @@ Module.register("MMM-Parcel", {
 
     start: function() {
         Log.info("Starting module: " + this.name);
-//		Log.log("Starting module: "+ this.name) ;
         this.sendSocketNotification('CONFIG', this.config);
-		this.aftershipResults = {}; 
+		this.aftershipResults = {trackings:[]}; 
 		this.loaded = false ;
 		this.sendSocketNotification('AFTERSHIP_REQUEST', this.config.updateInterval); 	
     },
@@ -70,18 +68,13 @@ Module.register("MMM-Parcel", {
 		
 		var parcelList = this.aftershipResults.trackings;
 		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
-//		this.sendSocketNotification("PARCELLIST:", JSON.stringify(parcelList)) ;
-		
-		
-		//remove expired deliveries if hideExpired is true;
+
 		var l = [];
 		for (var i = 0; i < parcelList.length; i++) {
 				if (!(parcelList[i].tag == "Expired" && hideExpired)) {
 					l.push(parcelList[i]);
 				}
 			};
-
-//		Log.log(JSON.stringify(l)) ;
 		
 		if (l.length == 0) {
 			wrapper.innerHTML = "No Data" ;
@@ -98,7 +91,6 @@ Module.register("MMM-Parcel", {
 		var count = 0 ;
 		var p ;
 		for (p of l) {
-//			this.sendSocketNotification("PARCEL No", count+1 + ": " + JSON.stringify(p)) ;
 			
 			if (count++ == this.config.maxNumber) { break; };
 			
@@ -110,10 +102,9 @@ Module.register("MMM-Parcel", {
 			var parcelName = (("title" in p) && p.title != null)?p.title:p.tracking_number;
 			
 				// icon 
-//				this.sendSocketNotification("ICON:", (JSON.stringify(parcelIcons[parcelStatus.indexOf(p.tag)]))) ;
 				parcelWrapperheaderline.appendChild(this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.tag)], parcelIconColor[parcelStatus.indexOf(p.tag)]));
 				
-				// parcelname and status (in text) 
+				// parcelname, and possibly status & courier slug
 				var headerwrapper = document.createElement("td");
 				headerwrapper.colSpan = (isCompact)?"2":"3";
 				headerwrapper.style.whiteSpace = "nowrap";
@@ -124,9 +115,8 @@ Module.register("MMM-Parcel", {
 					")" ;
 				parcelWrapperheaderline.appendChild(headerwrapper);
 				
-				// if present: time in locale + clock icon
-//				this.sendSocketNotification("COMPLETED: ", "the parcelinfo part of the header") ;
-
+				// expected delivery time with inconspicuous formatting depending on options. 
+				// empty text if date and time not known. Only days if date known and time unknown. 
 				var deliverywrapper = document.createElement("td");
 				deliverywrapper.innerHTML = "";
 				if ( (p.expected_delivery != null) && p.expected_delivery != "") {
@@ -156,7 +146,7 @@ Module.register("MMM-Parcel", {
 					}
 				}
 				
-
+			//place the delivery time text according to Compact/Separate line option. 
 			if (isCompact) {
 				deliverywrapper.align = "right" ;
 				deliverywrapper.className = "ParcelTimeCompact" ;
@@ -176,28 +166,17 @@ Module.register("MMM-Parcel", {
 				}
 			}
 				
-
-//			this.sendSocketNotification("COMPLETED: ", "the wrapperheaderline(s)") ;
-			
+		
 			// infoline (if relevant)
 			if ((p.checkpoints != undefined) && p.checkpoints.length != 0) { 
 				var parcelWrapperinfoline = document.createElement("tr") ;
 				parcelWrapperinfoline.className = "ParcelInfo"; 
-//				parcelWrapperinfoline.style.color = "grey";
 				var lastLoc = p.checkpoints[p.checkpoints.length-1];
-				
 				// empty icon for indent
 				parcelWrapperinfoline.appendChild(this.makeParcelIconWrapper("fa-fw"));
 				// location icon 
 				parcelWrapperinfoline.appendChild(this.makeParcelIconWrapper("fa fa-location-arrow fa-fw"));
 				// last location + location message
-				
-//				Log.log(JSON.stringify(lastLoc));
-//				Log.log(lastLoc.city);
-//				Log.log(lastLoc.state);
-//				Log.log(lastLoc.country_name);
-//				Log.log(lastLoc.message);
-				
 				var infotextwrapper = document.createElement("td");
 				infotextwrapper.colSpan = "2";
 				var extraInfoText = ((lastLoc.city != null)?(lastLoc.city + ", "):"") + 
@@ -205,14 +184,13 @@ Module.register("MMM-Parcel", {
 					lastLoc.country_name + 
 					((lastLoc.message != null)?": ":"") +
 					lastLoc.message ;
-//				this.sendSocketNotification("EXTRA LINEINFO:",extraInfoText) ;
-//				infotextwrapper.style.whiteSpace = "nowrap";
 				infotextwrapper.innerHTML = extraInfoText ;
 				parcelWrapperinfoline.appendChild(infotextwrapper);
 				// add infoline
 				wrapper.appendChild(parcelWrapperinfoline);					
 			}
 		}
+		
         return wrapper; 
 		
     }, // <-- closes getDom
@@ -221,7 +199,6 @@ Module.register("MMM-Parcel", {
 
     socketNotificationReceived: function(notification, payload) {
         if (notification === 'AFTERSHIP_RESULT') {
-//			Log.log('AFTERSHIP RESULT Notification received back') ;
 			this.loaded = true ;
 			this.aftershipResults = payload ;
 			this.updateDom(this.config.animationSpeed);
