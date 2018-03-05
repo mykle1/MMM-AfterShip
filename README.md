@@ -9,13 +9,15 @@ Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
-WORK IN PROGRESS.<b> NO RELEASE YET!</b>EXPECTED DATE FOR V1.0 RELEASE 10 March 2018. 
+WORK IN PROGRESS. YES! <b>Functional pre-release available now!</b>
+Please start using and send me your comments! 
+V1.0 RELEASE is expected on 10-17 March 2018. 
 
 Example with expected deliveries on a separate line:
 
 ![](pictures/1.png)
 
-Example in the compact view:
+Example of the same in the compact view:
 
 ![](pictures/2.png)
 
@@ -102,7 +104,7 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code>
 				<br><b>Default value:</b> <code>true</code>
 				<br><b>Example:</b> "3DT123456789(In transit, fedex)" is shown when <code>showCourier: true</code> 
-				and "3DT123456789(In transit)" is shown when <code>showCourier: false<>
+				and "3DT123456789(In transit)" is shown when <code>showCourier: false</code>
 			</td>
 		</tr>
 		<tr>
@@ -165,7 +167,7 @@ The following properties can be configured:
 			<td>Colors of the parcel status icons in the header<br>
 				<br><b>Possible values:</b> <code>[s1,...,s8]</code>. Array of 8 strings defining the icon colors. 
 				<br><b>Default value:</b> <code>["red","red","green","green","cornflowerblue","cornflowerblue","grey","grey"]</code>. 8 colors.
-				<br><b>Note:</b> <code> the colors are icon colors of the Parcel Status in the same order as the texts in the <code>isSorted</code> option above.
+				<br><b>Note:</b> The colors are icon colors of the Parcel Status in the same order as the texts in the <code>isSorted</code> option above.
 				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
 			</td>
 		</tr>	
