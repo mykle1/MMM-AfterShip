@@ -9,9 +9,13 @@ Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
-NOW WORK IN PROGRESS. NO RELEASE YET! EXPECTED DATE FOR V1.0 RELEASE 10 March 2018. 
+WORK IN PROGRESS.<b> NO RELEASE YET!</b>EXPECTED DATE FOR V1.0 RELEASE 10 March 2018. 
 
-![](pictures/1.png) ![](pictures/2.png)
+Example with expected deliveries on a separate line:
+![](pictures/1.png)
+
+Example in the compact view:
+![](pictures/2.png)
 
 ## Installation
 
@@ -94,13 +98,13 @@ The following properties can be configured:
 			<td> Determines whether  the shortcode of the courier in the Parcel header is shown<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code>
 				<br><b>Default value:</b> <code>true</code>
-				<br><b>Example:</b> "3DT123456789(In transit, fedex)" is shown when true and "3DT123456789(In transit)" is shown when false
+				<br><b>Example:</b> "3DT123456789(In transit, fedex)" is shown when <code>showCourier: true</code> and "3DT123456789(In transit)" is shown when <code>showCourier: false<>
 			</td>
 		</tr>
 		<tr>
 			<td><code>autoHide</code></td>
 			<td>The module hides itself when there are no parcels found<br>
-				<br><b>Possible values:</b> <code>false</code>, <code>true</code> 
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>false</code>
 				<br><b>Note:</b> Not yet implemented. Option has no effect at this moment
 			</td>
@@ -118,7 +122,7 @@ The following properties can be configured:
 		<tr>
 			<td><code>isCompact</code></td>
 			<td>Determines whether the expected delivery time (if known for the parcel) is shown on a separate line or on the same line as the parcel header (see picture for example). <br>
-				<br><b>Possible values:</b> <code>false</code>, <code>true</code> 
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>false</code>
 			</td>
 		</tr>
@@ -133,8 +137,8 @@ The following properties can be configured:
 			<td><code>updateInterval</code></td>
 			<td>Time between requests to the API in milliseconds<br>
 				<br><b>Possible values:</b> <code>int</code>
-				<br><b>Default value:</b> <code>600000</code>
-				<br><b>Note:</b> Internally the module uses 60000 as an absolute lower bound, whatever the config value is. Don't overload the API!
+				<br><b>Default value:</b> <code>600000</code> =10 minutes.
+				<br><b>Note:</b> Internally the module uses 60000 (1 minute) as an absolute lower bound, whatever the config value is. Don't overload the API!
 			</td>
 		</tr>	
 		<tr>
@@ -145,14 +149,14 @@ The following properties can be configured:
 				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Afgeleverd",  "Onderweg",
                 				"Ingevoerd", "Wachtend", "Te oud"],</code> for Dutch Status texts. If you trust the icons you can leave all 
 								(or some) of these texts empty by defining the empty string <code>""</code>. Just take care to specify an array of total 8 strings! 
-								Default are the English texts, if you are happy with the English descriptions you may drop this item in your module-config.  
+								Default are the English texts, if you are happy with the English descriptions you may leave this item out of your module-config.  
 			</td>
 		</tr>			
 		<tr>
 			<td><code>parcelIconColor</code></td>
 			<td>Colors of the parcel status icons in the header<br>
 				<br><b>Possible values:</b> <code>[s1,...,s8]</code>. Array of 8 strings. 
-				<br><b>Default value:</b> <code>["red","red","blue","blue","green","green","grey","grey"]]</code>. 8 colors.
+				<br><b>Default value:</b> <code>["red","red","blue","blue","green","green","grey","grey"]</code>. 8 colors.
 				<br><b>Note:</b> <code> the colors are icon colors of the Parcel Status in the same order as the texts in the option above.
 				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
 			</td>
@@ -168,7 +172,7 @@ The following properties can be configured:
 				<br> <code>lastWeek : '[Last] dddd',</code>
 				<br> <code>nextWeek : 'dddd',</code>
 				<br> <code>sameElse : 'L'}</code>
-				<br><b>Example:</b> Fill in your language preference. English is default. Only relevant when <code>isCompact=false</code>. 
+				<br><b>Example:</b> Fill in your language preference. English is default. Only relevant when <code>isCompact: false</code>. 
 				 This option does nothing when <code>isCompact=true</code>. 
 			</td>
 		</tr>
@@ -178,7 +182,7 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>string</code>
 				<br><b>Default value:</b> <code>"Delivery expected: "</code>
 				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>isCompact=false</code>. 
-				 This option does nothing when <code>isCompact=true</code>. 
+				 This option does nothing when <code>isCompact: true</code>. 
 			</td>
 	</tbody>
 </table>
