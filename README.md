@@ -11,7 +11,7 @@ Inspired by MMM-AfterShip by Mykle1.
 
 NOW WORK IN PROGRESS. NO RELEASE YET! EXPECTED DATE FOR V1.0 RELEASE 10 March 2018. 
 
-![](images/1.png) ![](images/2.png)
+![](pictures/1.png) ![](pictures/2.png)
 
 ## Installation
 
