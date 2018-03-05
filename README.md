@@ -12,9 +12,11 @@ Inspired by MMM-AfterShip by Mykle1.
 WORK IN PROGRESS.<b> NO RELEASE YET!</b>EXPECTED DATE FOR V1.0 RELEASE 10 March 2018. 
 
 Example with expected deliveries on a separate line:
+
 ![](pictures/1.png)
 
 Example in the compact view:
+
 ![](pictures/2.png)
 
 ## Installation
@@ -162,7 +164,7 @@ The following properties can be configured:
 			</td>
 		</tr>	
 		<tr>
-			<td><code>onlyDayesFormat</code></td>
+			<td><code>onlyDaysFormat</code></td>
 			<td>Format for delivery time when no hour is yet known for the Parcel. In moment.js calendar format<br>
 				<br><b>Possible values:</b> <code>moment.js calendar specification</code>
 				<br><b>Default value:</b> 
