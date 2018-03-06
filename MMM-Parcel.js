@@ -11,6 +11,7 @@ Module.register("MMM-Parcel", {
     // Module config defaults.           // Make all changes in your config.js file
     defaults: {
         apiKey: '', 
+		maxWidth: "450px",
 		animationSpeed: 2500,
 		maxNumber: 10,
 		showCourier: true,
@@ -19,8 +20,8 @@ Module.register("MMM-Parcel", {
 		isCompact: false,
 		hideExpired: true,
         updateInterval: 600000, // 10 minutes
-		parcelStatusText: ["Exception", "Failed Attempt","In Delivery","Delivered",  "In Transit", "Info Received", "Pending", "Expired"],
-		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
+		parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", "Info Received","Pending", "Delivered", "Expired"],
+		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "lightgrey", "lightgrey"],
 		onlyDaysFormat: 
 			{lastDay : '[Yesterday]',
 			 sameDay : '[Today]',
@@ -52,9 +53,9 @@ Module.register("MMM-Parcel", {
         var wrapper = document.createElement("table");
         wrapper.className = "small";
         wrapper.style.maxWidth = this.config.maxWidth;
-		const parcelStatus = [ "Exception",  "AttemptFail","OutForDelivery", "Delivered",   "InTransit","InfoReceived","Pending", "Expired"];
-		const parcelIcons = [ "fa fa-exclamation-triangle fa-fw", "fa fa-bolt fa-fw", "fa fa-truck fa-fw", "fa fa-check-square-o fa-fw", 
-		                     "fa fa-exchange fa-fw", "fa fa-file-text-o fa-fw", "fa fa-clock-o fa-fw", "fa fa-history fa-fw"];
+		const parcelStatus = [ "Exception",  "AttemptFail","OutForDelivery", "InTransit","InfoReceived","Pending", "Delivered", "Expired"];
+		const parcelIcons = [ "fa fa-exclamation-triangle fa-fw", "fa fa-bolt fa-fw", "fa fa-truck fa-fw", "fa fa-exchange fa-fw",
+		                     "fa fa-file-text-o fa-fw", "fa fa-clock-o fa-fw", "fa fa-check-square-o fa-fw", "fa fa-history fa-fw"];
 		const parcelStatustext = this.config.parcelStatusText ;
 		const parcelIconColor = this.config.parcelIconColor;
 		const isCompact = this.config.isCompact;
