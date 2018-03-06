@@ -13,7 +13,7 @@ WORK IN PROGRESS. YES! <b>Functional pre-release available now!</b>
 Please start using and send me your comments! 
 V1.0 RELEASE is expected on 10-17 March 2018. 
 
-Example with expected deliveries on a separate line:
+Example with expected deliveries on a separate line. Line is only shown when an ETA is known. 
 
 ![](pictures/1.png)
 
@@ -54,8 +54,8 @@ config: {
 	isCompact: false, // false = show version with expected delivery time on a separate line. 
 	hideExpired: false,
 	updateInterval: 600000, // 10 minutes = 10 * 60 * 1000 milliseconds. 
-	parcelStatusText: ["Exception", "Failed Attempt","In Delivery","Delivered",  
-	                   "In Transit", "Info Received", "Pending", "Expired"], // This is the default. Enter your own language text
+	parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", 
+	                   "Info Received", "Pending", "Delivered", "Expired"], // This is the default. Enter your own language text
 	parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"], // This is the default. Change for other icon colors
 	onlyDaysFormat: {
 	  lastDay : '[Yesterday]',
