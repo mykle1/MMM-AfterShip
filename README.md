@@ -133,8 +133,8 @@ The following properties can be configured:
 			<td><code>isSorted</code></td>
 			<td>Parcels are shown in a sorted order depending on status. The module implements a fixed --non-configurable-- sort order 
 			    for the parcel statuses from the API. The order is:	<code>Exception</code>, <code>AttemptFail</code>,
-			    <code>OutForDelivery</code>, <code>Delivered</code>, <code>InTransit</code>, <code>InfoReceived</code>, 
-				<code>Pending</code>, <code>Expired</code><br>
+			    <code>OutForDelivery</code>, <code>InTransit</code>, <code>InfoReceived</code>, 
+				<code>Pending</code>, <code>Delivered</code>, <code>Expired</code><br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>true</code>
 				<br><b>Note:</b> Exceptions first, Expired last. Sort is according to urgency of action needed from the receiver. 
@@ -169,8 +169,8 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>[s1,...,s8]</code>. Array of 8 strings defining the names for the statuses in the order mentioned in the
 				       <code>isSorted</code> option above. 
 				<br><b>Default value:</b> <code>["Exception",...,"Expired"]</code>. English is default. Choose your own language descriptions.
-				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Afgeleverd",  "Onderweg",
-                				"Ingevoerd", "Wachtend", "Te oud"],</code> for Dutch Status texts. If you trust the colored status icons to guide you, 
+				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging", "Onderweg",
+                				"Ingevoerd", "Wachtend", "Afgeleverd", "Te oud"],</code> for Dutch Status texts. If you trust the colored status icons to guide you, 
 								you can leave all 
 								(or some) of these texts empty by defining empty strings (<code>""</code>). Just take care to specify an array of total 8 strings! 
 								Default are English texts, if you are happy with the English descriptions you may leave this item out of your module-config.  
