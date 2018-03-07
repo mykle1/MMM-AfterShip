@@ -13,7 +13,7 @@ WORK IN PROGRESS. YES! <b>Functional pre-release available now!</b>
 Please start using and send me your comments! 
 V1.0 RELEASE is expected on 10-17 March 2018. 
 
-Example with expected deliveries on a separate line. Line is only shown when an ETA is known. 
+Example with expected deliveries on a separate line. Expected delivery line is only shown when an ETA is known. 
 
 ![](pictures/1.png)
 
@@ -152,7 +152,7 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>0</code>
 				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if known) on an separate line, 
 				as well as a separate info line (if present).
-				<code>1</code> shows a more compact version and <code>2</code> also doesn't display the infoline, so effectively makes it a one-liner per shipment. 
+				<code>1</code> shows a more compact version and <code>2</code> effectively makes it a one-liner per shipment. 
 			</td>
 		</tr>
 		<tr>
