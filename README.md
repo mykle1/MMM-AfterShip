@@ -9,17 +9,21 @@ Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
-WORK IN PROGRESS. YES! <b>Functional pre-release available now!</b>
+YES! <b>Functional release V1.0 available now!</b>
 Please start using and send me your comments! 
-V1.0 RELEASE is expected on 10-17 March 2018. 
 
-Example with expected deliveries on a separate line. Line is only shown when an ETA is known. 
+
+Example with expected deliveries on a separate line. Expected delivery line is only shown when an ETA is known. 
 
 ![](pictures/1.png)
 
 Example of the same in the compact view:
 
 ![](pictures/2.png)
+
+And in the very compact view (one-liner per shipment):
+
+![](pictures/3.png)
 
 ## Installation
 
@@ -51,7 +55,7 @@ config: {
 	showCourier: true,
 	autoHide: false, // not functional yet in this version
 	isSorted: true,  // sort on delivery Status (most important ones first)
-	isCompact: false, // false = show version with expected delivery time on a separate line. 
+	compactness: 0, // 0 = elaborate, 1 = compact display, 2 = very compact, one-liner per shipment
 	hideExpired: false,
 	updateInterval: 600000, // 10 minutes = 10 * 60 * 1000 milliseconds. 
 	parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", 
@@ -70,7 +74,8 @@ config: {
 }
 ````
 
-The above example is a bit long. If you are OK with English texts and you do like the default colors and settings provided by the module the below is a simple config suffices!
+The above example is a bit long. If you are OK with English texts and you do like the default colors and settings 
+provided by the module a simple config suffices!
 
 ````javascript
 {
@@ -141,11 +146,14 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>isCompact</code></td>
+			<td><code>compactness</code></td>
 			<td>Determines whether the expected delivery time (if known for the parcel) is shown on a separate line or on the same line 
 			     as the parcel header (see pictures for example). <br>
-				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
-				<br><b>Default value:</b> <code>false</code>
+				<br><b>Possible values:</b> <code>0</code>, <code>1</code> or <code>2</code>
+				<br><b>Default value:</b> <code>0</code>
+				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if known) on an separate line, 
+				as well as a separate info line (if present).
+				<code>1</code> shows a more compact version and <code>2</code> effectively makes it a one-liner per shipment. 
 			</td>
 		</tr>
 		<tr>
@@ -183,12 +191,15 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>["red","red","green","green","cornflowerblue","cornflowerblue","grey","grey"]</code>. 8 colors.
 				<br><b>Note:</b> The colors are icon colors of the Parcel Status in the same order as the texts in the <code>isSorted</code> option above.
 				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
+				<br><b>Note:</b> If the extra info line (whether visible or not) contains the text "to be collected" the parcel is marked as delivered but should still be collected. 
+				To make that visible the icon color of the delivered icon changes in that case
+				to the color of <code>OutforDelivery</code> status. Default: from </code>"grey"</code> to <code>"cornflowerblue"</code>. 
 			</td>
 		</tr>	
 		<tr>
 			<td><code>onlyDaysFormat</code></td>
 			<td>Format for delivery time when no hour is yet known for the Parcel. In moment.js calendar format<br>
-				<br><b>Possible values:</b> <code>moment.js calendar specification</code>
+				<br><b>Possible values:</b> <code>moment.js calendar locale specification</code>
 				<br><b>Default value:</b> 
 				<br><code>{lastDay : '[Yesterday]',</code>
 				<br> <code>sameDay : '[Today]',</code>
@@ -196,8 +207,8 @@ The following properties can be configured:
 				<br> <code>lastWeek : '[Last] dddd',</code>
 				<br> <code>nextWeek : 'dddd',</code>
 				<br> <code>sameElse : 'L'}</code>
-				<br><b>Example:</b> Fill in your language preference. English is default. Only relevant when <code>isCompact: false</code>. 
-				 This option does nothing when <code>isCompact: true</code>. 
+				<br><b>Example:</b> Fill in your language preference. English is default. Only relevant when <code>compactness: 0</code>. 
+				 This option does nothing otherwise. 
 			</td>
 		</tr>
 		<tr>
@@ -205,8 +216,8 @@ The following properties can be configured:
 			<td>Text to show before showing the expected delivery date<br>
 				<br><b>Possible values:</b> <code>string</code>
 				<br><b>Default value:</b> <code>"Delivery expected: "</code>
-				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>isCompact: false</code>. 
-				 This option does nothing when <code>isCompact: true</code>. 
+				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>compactness: 0</code>. 
+				 This option does nothing otherwise. 
 			</td>
 	</tbody>
 </table>

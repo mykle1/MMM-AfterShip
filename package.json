@@ -1,28 +1,33 @@
 {
-  "name": "MMM-Parcel",
+  "name": "mmm-parcel",
   "description": "Parcel Tracking via AfterShip.com for Magic Mirror 2",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinkooij/MMM-Parcel"
+    "url": "git+https://github.com/martinkooij/MMM-Parcel.git"
   },
   "keywords": [
     "magic mirror",
     "smart mirror",
     "parcel",
-	"tracking",
-	"aftership",
+    "tracking",
+    "aftership",
     "module"
   ],
   "author": "Martin Kooij",
-  "contributors": [ "https://github.com/martinkooij/MMM-Parcel/graphs/contributors" ],
+  "contributors": [
+    "https://github.com/martinkooij/MMM-Parcel/graphs/contributors"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/martinkooij/MMM-Parcel/issues"
   },
   "homepage": "https://github.com/martinkooij/MMM-Parcel#readme",
   "dependencies": {
-    "moment": "latest",
-    "aftership": "latest"
+     "aftership": "latest"
+  },
+  "main": "MMM-Parcel.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

@@ -17,11 +17,11 @@ Module.register("MMM-Parcel", {
 		showCourier: true,
 		autoHide: false, // not functional yet.
 		isSorted: true,
-		isCompact: false,
-		hideExpired: true,
+		compactness: 0, // 0 = elaborate, 1 = compact, 2 = very compact
+		hideExpired: false,
         updateInterval: 600000, // 10 minutes
 		parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", "Info Received","Pending", "Delivered", "Expired"],
-		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "lightgrey", "lightgrey"],
+		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
 		onlyDaysFormat: 
 			{lastDay : '[Yesterday]',
 			 sameDay : '[Today]',
@@ -58,7 +58,8 @@ Module.register("MMM-Parcel", {
 		                     "fa fa-file-text-o fa-fw", "fa fa-clock-o fa-fw", "fa fa-check-square-o fa-fw", "fa fa-history fa-fw"];
 		const parcelStatustext = this.config.parcelStatusText ;
 		const parcelIconColor = this.config.parcelIconColor;
-		const isCompact = this.config.isCompact;
+		const isCompact = this.config.compactness == 1 || this.config.compactness == 2
+		const isveryCompact = this.config.compactness == 2;
 
 
         if (!this.loaded) {
@@ -70,6 +71,7 @@ Module.register("MMM-Parcel", {
 		var parcelList = this.aftershipResults.trackings;
 		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
 
+		//remove expired deliveries if hideExpired is true;
 		var l = [];
 		for (var i = 0; i < parcelList.length; i++) {
 				if (!(parcelList[i].tag == "Expired" && hideExpired)) {
@@ -101,9 +103,10 @@ Module.register("MMM-Parcel", {
 			var extraWrapperHeaderLine = document.createElement("tr");
 			extraWrapperHeaderLine.className = "ParcelInfo";
 			var parcelName = (("title" in p) && p.title != null)?p.title:p.tracking_number;
+			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.tag)], parcelIconColor[parcelStatus.indexOf(p.tag)])
 			
 				// icon 
-				parcelWrapperheaderline.appendChild(this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.tag)], parcelIconColor[parcelStatus.indexOf(p.tag)]));
+				parcelWrapperheaderline.appendChild(thisParcelIcon);
 				
 				// parcelname, and possibly status & courier slug
 				var headerwrapper = document.createElement("td");
@@ -169,7 +172,7 @@ Module.register("MMM-Parcel", {
 				
 		
 			// infoline (if relevant)
-			if ((p.checkpoints != undefined) && p.checkpoints.length != 0) { 
+			if (((p.checkpoints) != undefined) && p.checkpoints.length != 0) { 
 				var parcelWrapperinfoline = document.createElement("tr") ;
 				parcelWrapperinfoline.className = "ParcelInfo"; 
 				var lastLoc = p.checkpoints[p.checkpoints.length-1];
@@ -186,9 +189,13 @@ Module.register("MMM-Parcel", {
 					((lastLoc.message != null)?": ":"") +
 					lastLoc.message ;
 				infotextwrapper.innerHTML = extraInfoText ;
+				//change delivered icon color to "OutforDelivery" color if still to be collected
+				if (extraInfoText.indexOf("to be collected") != -1 && p.tag === "Delivered") {
+					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("OutForDelivery")];
+				}
 				parcelWrapperinfoline.appendChild(infotextwrapper);
-				// add infoline
-				wrapper.appendChild(parcelWrapperinfoline);					
+				// add infoline unless very compact style
+				if (!isveryCompact) { wrapper.appendChild(parcelWrapperinfoline);}					
 			}
 		}
 		
