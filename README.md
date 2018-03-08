@@ -9,9 +9,9 @@ Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
-WORK IN PROGRESS. YES! <b>Functional pre-release available now!</b>
+YES! <b>Functional release V1.0 available now!</b>
 Please start using and send me your comments! 
-V1.0 RELEASE is expected on 10-17 March 2018. 
+
 
 Example with expected deliveries on a separate line. Expected delivery line is only shown when an ETA is known. 
 
