@@ -74,7 +74,8 @@ config: {
 }
 ````
 
-The above example is a bit long. If you are OK with English texts and you do like the default colors and settings provided by the module the below is a simple config suffices!
+The above example is a bit long. If you are OK with English texts and you do like the default colors and settings 
+provided by the module a simple config suffices!
 
 ````javascript
 {
