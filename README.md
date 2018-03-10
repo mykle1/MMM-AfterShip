@@ -9,10 +9,6 @@ Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
-YES! <b>Functional release V1.0 available now!</b>
-Please start using and send me your comments! 
-
-
 Example with expected deliveries on a separate line. Expected delivery line is only shown when an ETA is known. 
 
 ![](pictures/1.png)
@@ -53,10 +49,11 @@ config: {
 	apiKey: 'Your API KEY goes here', // Your free API Key from aftership.com
 	maxNumber: 10, //maximum number of Parcels to show
 	showCourier: true,
-	autoHide: false, // not functional yet in this version
+	autoHide: false, // hide module on mirror when there are no deliveries to be shown
 	isSorted: true,  // sort on delivery Status (most important ones first)
-	compactness: 0, // 0 = elaborate, 1 = compact display, 2 = very compact, one-liner per shipment
-	hideExpired: false,
+	compactness: -1, // 0 = elaborate, 1 = compact display, 2 = very compact, one-liner per shipment, -1 = automatic
+	hideExpired: true, // don't show expired parcels
+	hideDelivered: false, // determines whether to show delivered parcels. Not recommended to hide. 
 	updateInterval: 600000, // 10 minutes = 10 * 60 * 1000 milliseconds. 
 	parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", 
 	                   "Info Received", "Pending", "Delivered", "Expired"], // This is the default. Enter your own language text
@@ -69,13 +66,13 @@ config: {
 	  nextWeek : 'dddd',
 	  sameElse : 'L'
 	  }, // formatting when only days are shown and time is unknown. 
-	expectedDeliveryText: 'Delivery Expected: '	 // This is the default. Change infoline text if you want 
+	expectedDeliveryText: 'Delivery Expected: '	 // This is the default. Changes time infoline. 
 	}
 }
 ````
 
 The above example is a bit long. If you are OK with English texts and you do like the default colors and settings 
-provided by the module a simple config suffices!
+provided by the module the following simple config suffices!
 
 ````javascript
 {
@@ -83,7 +80,7 @@ module: 'MMM-Parcel',
 position: 'top_right',	// This can be any of the regions. Best results in left or right regions.
 header: 'My Parcels',   // This is optional
 config: {
-	apiKey: 'Your API KEY goes here', // Your free API Key from aftership.com
+	apiKey: 'Your API KEY goes here' // Your free API Key from aftership.com
 	}
 }
 ````
@@ -131,7 +128,8 @@ The following properties can be configured:
 			<td>The module hides itself when there are no parcels found<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>false</code>
-				<br><b>Note:</b> Not yet implemented. Option has no effect at this moment
+				<br><b>Note:</b> Hide module from the mirror when there are no Parcels to be shown. Also reduces the update interval 
+				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest.  
 			</td>
 		</tr>
 				<tr>
@@ -149,11 +147,13 @@ The following properties can be configured:
 			<td><code>compactness</code></td>
 			<td>Determines whether the expected delivery time (if known for the parcel) is shown on a separate line or on the same line 
 			     as the parcel header (see pictures for example). <br>
-				<br><b>Possible values:</b> <code>0</code>, <code>1</code> or <code>2</code>
-				<br><b>Default value:</b> <code>0</code>
-				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if known) on an separate line, 
-				as well as a separate info line (if present).
+				<br><b>Possible values:</b> <code>-1</code>, <code>0</code>, <code>1</code> or <code>2</code>
+				<br><b>Default value:</b> <code>-1</code>
+				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if present) on a separate line.
+				it also displays a separate info line on the latest checkpoint (if present).
 				<code>1</code> shows a more compact version and <code>2</code> effectively makes it a one-liner per shipment. 
+				<code>-1</code> (=automatic) takes a compactness depending on the #parcels shown 
+				   (<code>0</code> when <=3, <code>1</code> when <=6, <code>2</code> in case of long lists). 
 			</td>
 		</tr>
 		<tr>
@@ -161,6 +161,16 @@ The following properties can be configured:
 			<td>Determines whether parcels with status "Expired" should be shown.<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>true</code>
+	
+			</td>
+		</tr>
+		<tr>
+			<td><code>hideDelivered</code></td>
+			<td>Determines whether parcels with status "Delivered" should be shown.<br>
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
+				<br><b>Default value:</b> <code>false</code>
+				<br><b>Note:</b> <em>Not recommended for use</em>. Sometimes the infoline shows important info where, when and how the delivery was. 
+				You don't want to forget your parcel if it has been delivered at the neighbors ;). 
 			</td>
 		</tr>
 		<tr>
@@ -226,6 +236,10 @@ The following properties can be configured:
 - [aftership] (installed via `npm install aftership`)
 - [moment] (already available)
 - font-awesome 4.7.0 (already available)
+
+## Newest features
+- autoHide implemented
+- compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
 
 ## Known issues
 - autoHide does not work yet. 

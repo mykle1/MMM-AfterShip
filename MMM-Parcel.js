@@ -15,9 +15,9 @@ Module.register("MMM-Parcel", {
 		animationSpeed: 2500,
 		maxNumber: 10,
 		showCourier: true,
-		autoHide: false, // not functional yet.
+		autoHide: false, //do not autoHide is the default
 		isSorted: true,
-		compactness: 0, // 0 = elaborate, 1 = compact, 2 = very compact
+		compactness: -1, // 0 = elaborate, 1 = compact, 2 = very compact, -1 = automatic
 		hideExpired: false,
         updateInterval: 600000, // 10 minutes
 		parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", "Info Received","Pending", "Delivered", "Expired"],
@@ -41,15 +41,22 @@ Module.register("MMM-Parcel", {
 
     start: function() {
         Log.info("Starting module: " + this.name);
-        this.sendSocketNotification('CONFIG', this.config);
 		this.aftershipResults = {trackings:[]}; 
 		this.loaded = false ;
-		this.sendSocketNotification('AFTERSHIP_REQUEST', this.config.updateInterval); 	
+        this.sendSocketNotification('CONFIG', this.config);
+		this.sendSocketNotification("INTERVAL_SET", this.config.updateInterval) ;
+		this.sendSocketNotification('AFTERSHIP_FETCHER'); 	
     },
 	
+	suspend : function() {
+		this.sendSocketNotification("INTERVAL_SET", Math.max(900000,this.config.updateInterval*2)) ;
+	},
+	
+	resume: function() {
+		this.sendSocketNotification("INTERVAL_SET", this.config.updateInterval) ;
+	},
 
     getDom: function() {
-		this.sendSocketNotification('JUST_SAYING',"GETDOM started, " + this.loaded);
         var wrapper = document.createElement("table");
         wrapper.className = "small";
         wrapper.style.maxWidth = this.config.maxWidth;
@@ -58,8 +65,6 @@ Module.register("MMM-Parcel", {
 		                     "fa fa-file-text-o fa-fw", "fa fa-clock-o fa-fw", "fa fa-check-square-o fa-fw", "fa fa-history fa-fw"];
 		const parcelStatustext = this.config.parcelStatusText ;
 		const parcelIconColor = this.config.parcelIconColor;
-		const isCompact = this.config.compactness == 1 || this.config.compactness == 2
-		const isveryCompact = this.config.compactness == 2;
 
 
         if (!this.loaded) {
@@ -71,20 +76,38 @@ Module.register("MMM-Parcel", {
 		var parcelList = this.aftershipResults.trackings;
 		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
 
-		//remove expired deliveries if hideExpired is true;
+		//remove expired/delivered deliveries if hideExpired / hideDelivered is true;
 		var l = [];
 		for (var i = 0; i < parcelList.length; i++) {
-				if (!(parcelList[i].tag == "Expired" && hideExpired)) {
+				if (!(this.config.hideDelivered && parcelList[i].tag == "Delivered") && !(this.config.hideExpired && parcelList[i].tag == "Expired" )) {
 					l.push(parcelList[i]);
 				}
 			};
-		
+			
+			
+		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
 		if (l.length == 0) {
+			if (this.config.autoHide && (this.lockStrings.indexOf(this.name) == -1)) {
+			  this.hide(0,{lockString: this.name});
+			};
 			wrapper.innerHTML = "No Data" ;
             wrapper.classList.add("light", "small");
             return wrapper;			
 		};
 		
+		if (this.config.autoHide && this.hidden) {
+			  this.sendSocketNotification("INTERVALSET", this.config.updateInterval) ;
+			  this.show(0,{lockString: this.name});
+		};	
+		
+		
+		var isCompact = this.config.compactness == 1 || this.config.compactness == 2;
+		var isveryCompact = this.config.compactness == 2;
+		if (this.config.compactness == -1) {
+			isCompact = (Math.min(l.length,this.config.maxNumber) > 3) ;
+			isveryCompact = (Math.min(l.length,this.config.maxNumber) > 6) ;
+		}
+
 		
 		if (this.config.isSorted) {
 			l = l.sort(function(a,b){return parcelStatus.indexOf(a.tag) - parcelStatus.indexOf(b.tag);});
@@ -104,6 +127,7 @@ Module.register("MMM-Parcel", {
 			extraWrapperHeaderLine.className = "ParcelInfo";
 			var parcelName = (("title" in p) && p.title != null)?p.title:p.tracking_number;
 			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.tag)], parcelIconColor[parcelStatus.indexOf(p.tag)])
+			var lastLoc;
 			
 				// icon 
 				parcelWrapperheaderline.appendChild(thisParcelIcon);
@@ -111,14 +135,22 @@ Module.register("MMM-Parcel", {
 				// parcelname, and possibly status & courier slug
 				var headerwrapper = document.createElement("td");
 				headerwrapper.colSpan = (isCompact)?"2":"3";
-				headerwrapper.style.whiteSpace = "nowrap";
+				headerwrapper.className = "no-wrap" ;
 				headerwrapper.innerHTML = parcelName + " (" + parcelStatustext[parcelStatus.indexOf(p.tag)] + 
 					((this.config.showCourier)?(
 						((parcelStatustext[parcelStatus.indexOf(p.tag)] != "")?", ":"") + p.slug):
 						"") + 
 					")" ;
+					
 				parcelWrapperheaderline.appendChild(headerwrapper);
 				
+				if (( p.tag === "Delivered") &&  
+				   ((p.expected_delivery == null) || p.expected_delivery === "") && 
+				   ( (p.checkpoints != undefined) && p.checkpoints.length != 0)) {
+						lastLoc = p.checkpoints[p.checkpoints.length-1];
+						p.expected_delivery = lastLoc.checkpoint_time ;
+				};
+
 				// expected delivery time with inconspicuous formatting depending on options. 
 				// empty text if date and time not known. Only days if date known and time unknown. 
 				var deliverywrapper = document.createElement("td");
@@ -126,9 +158,11 @@ Module.register("MMM-Parcel", {
 				if ( (p.expected_delivery != null) && p.expected_delivery != "") {
 					if (!isCompact) {
 						if (p.expected_delivery.includes("T")) {
-							deliverywrapper.innerHTML = this.config.expectedDeliveryText + moment(p.expected_delivery).calendar();
+							deliverywrapper.innerHTML = ((p.tag === "Delivered")?"":this.config.expectedDeliveryText) + 
+							  moment(p.expected_delivery).calendar();
 						} else {
-							deliverywrapper.innerHTML = this.config.expectedDeliveryText + moment(p.expected_delivery).calendar(null,this.config.onlyDaysFormat);
+ 							deliverywrapper.innerHTML = ((p.tag === "Delivered")?"":this.config.expectedDeliveryText) + 
+							  moment(p.expected_delivery).calendar(null,this.config.onlyDaysFormat);
 						}
 					} else {
 						var startofDay = moment().startOf("day") ;
@@ -154,9 +188,10 @@ Module.register("MMM-Parcel", {
 			if (isCompact) {
 				deliverywrapper.align = "right" ;
 				deliverywrapper.className = "ParcelTimeCompact" ;
+				deliverywrapper.style.whiteSpace = "nowrap";
 				parcelWrapperheaderline.appendChild(deliverywrapper);
 				wrapper.appendChild(parcelWrapperheaderline);
-				headerwrapper.innerHTML = (headerwrapper.innerHTML.length > 40)?(headerwrapper.innerHTML.slice(0,36)+ "... "):headerwrapper.innerHTML;
+				headerwrapper.style.maxWidth = "calc("+ this.config.maxWidth + " - 110px)"
 			} else {
 				wrapper.appendChild(parcelWrapperheaderline);
 				if ((p.expected_delivery != null) && p.expected_delivery != "") {
@@ -175,7 +210,7 @@ Module.register("MMM-Parcel", {
 			if (((p.checkpoints) != undefined) && p.checkpoints.length != 0) { 
 				var parcelWrapperinfoline = document.createElement("tr") ;
 				parcelWrapperinfoline.className = "ParcelInfo"; 
-				var lastLoc = p.checkpoints[p.checkpoints.length-1];
+				lastLoc = p.checkpoints[p.checkpoints.length-1];
 				// empty icon for indent
 				parcelWrapperinfoline.appendChild(this.makeParcelIconWrapper("fa-fw"));
 				// location icon 

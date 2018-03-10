@@ -27,22 +27,19 @@ module.exports = NodeHelper.create({
     },
 	
     broadcastShipments: function() {
-				this.sendSocketNotification('AFTERSHIP_RESULT', mmparcelResult);
+		this.sendSocketNotification('AFTERSHIP_RESULT', mmparcelResult);
     },
 
     socketNotificationReceived: function(notification, payload) {
-    	 if (notification === "CONFIG") {
+    	 if (notification === 'CONFIG') {
             this.config = payload;
-			} else if (notification === 'AFTERSHIP_REQUEST') {
-            this.startShipmentsFetcher(payload) ;
+		} else if (notification === 'AFTERSHIP_FETCHER') {
+            this.startUpdateNext() ;
+		} else if (notification === 'INTERVAL_SET') {
+			mmparcelUpdateInterval = (payload<30000)?30000:payload;
         } else {
 			console.log("OOPS. ", notification, payload) ;
 		}
-	},
-	
-	startShipmentsFetcher: function(interval) {
-		mmparcelUpdateInterval = (interval<30000)?30000:interval;
-		this.startUpdateNext();
 	},
 	
 	startUpdateNext: function() {

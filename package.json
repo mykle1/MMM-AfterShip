@@ -1,7 +1,7 @@
 {
   "name": "mmm-parcel",
   "description": "Parcel Tracking via AfterShip.com for Magic Mirror 2",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martinkooij/MMM-Parcel.git"
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/martinkooij/MMM-Parcel#readme",
   "dependencies": {
-     "aftership": "latest"
+    "aftership": "latest"
   },
   "main": "MMM-Parcel.js",
   "scripts": {
