@@ -132,7 +132,7 @@ The following properties can be configured:
 				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest.  
 			</td>
 		</tr>
-				<tr>
+		<tr>
 			<td><code>isSorted</code></td>
 			<td>Parcels are shown in a sorted order depending on status. The module implements a fixed --non-configurable-- sort order 
 			    for the parcel statuses from the API. The order is:	<code>Exception</code>, <code>AttemptFail</code>,
@@ -160,8 +160,7 @@ The following properties can be configured:
 			<td><code>hideExpired</code></td>
 			<td>Determines whether parcels with status "Expired" should be shown.<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
-				<br><b>Default value:</b> <code>true</code>
-	
+				<br><b>Default value:</b> <code>true</code>.
 			</td>
 		</tr>
 		<tr>
