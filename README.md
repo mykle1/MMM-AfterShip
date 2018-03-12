@@ -68,7 +68,7 @@ config: {
 	  }, // formatting when only days are shown and time is unknown. 
 	expectedDeliveryText: 'Delivery Expected: '	 // This is the default. Changes time infoline. 
 	}
-}
+},
 ````
 
 The above example is a bit long. If you are OK with English texts and you do like the default colors and settings 
@@ -82,7 +82,7 @@ header: 'My Parcels',   // This is optional
 config: {
 	apiKey: 'Your API KEY goes here' // Your free API Key from aftership.com
 	}
-}
+},
 ````
 
 ## Configuration options
