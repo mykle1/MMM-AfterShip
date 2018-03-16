@@ -229,7 +229,8 @@ The following properties can be configured:
 				 This option does nothing otherwise. 
 			</td>
 		</tr>
-		<tr><code>autoTranslate</code></td>
+		<tr> 
+		    <td><code>autoTranslate</code></td>
 			<td>Translate text shown on the infoline in your own language via Google Translate<br>
 				<br><b>Possible values:</b> <code>language string</code> ot <code>false</code> for no Translation Service. 
 				<br><b>Default value:</b> <code>false</code>
@@ -265,12 +266,12 @@ Carefully follow the next steps. The goal is to retrieve from google a valid .js
 </ul>
 This ends the preparation of the authenticatio and authorization of the translate API at the google side. Congrats! Now we need to tell the Mirror...
  Luckily this is the easier part. 
- <li>
- <ul> go to the <code>~/MagicMirror/modules/MMM-Parcel</code> directory on your mirror</ul>
- <ul> transfer the .json file to this directory. (https://www.makeuseof.com/tag/copy-data-raspberry-pi-pc/)</ul>
- <ul> rename the file to <code>parceltranslate-credentials.json</code> </ul>
- <ul> check wether this file now exists in your <code>MMM-Parcel</code> directory together with <code>MMM-Parcel.js, node_helper.js</code>, etc.
- </li>
+ <ul>
+ <li> go to the <code>~/MagicMirror/modules/MMM-Parcel</code> directory on your mirror</li>
+ <li> transfer the .json file to this directory. (https://www.makeuseof.com/tag/copy-data-raspberry-pi-pc/)</li>
+ <li> rename the file to <code>parceltranslate-credentials.json</code> </li>
+ <li> check wether this file now exists in your <code>MMM-Parcel</code> directory together with <code>MMM-Parcel.js, node_helper.js</code>, etc.</li>
+ </ul>
  Now you are set(!) and add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
  Restart the mirror and off you go! 
  
@@ -302,7 +303,7 @@ config: {
 
 And Yo, see the Dutch mirror:
 
-![] ![](pictures/5.png)
+![] ![](pictures/6.png)
 
 
 ## Dependencies
