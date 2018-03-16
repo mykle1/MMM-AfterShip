@@ -256,13 +256,13 @@ and your Google cloud project. Also the project should be coupled to a Cloud bil
 is not free(!). Google Cloud services provide a free first year subsciption, so you can try! 
 
 Carefully follow the next steps. The goal is to retrieve from google a valid .json file that you can use! 
-<li> 
-<ul>Create or select a your own Google Project Cloud project via https://console.cloud.google.com/ </ul>
-<ul>Create a service account for this project <code>.json</code> file, see https://cloud.google.com/docs/authentication/getting-started. You'll need this keyfile later</ul>
-<ul>Create a billing account for Google Cloud Services (https://console.cloud.google.com/billing).</ul>
-<ul>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</ul>
-<ul>Open the API dashboard of your project. Click on Enable API's and choose Translation</ul>
-</li>
+<ul> 
+<li>Create or select a your own Google Project Cloud project via https://console.cloud.google.com/ </li>
+<li>Create a service account for this project <code>.json</code> file, see https://cloud.google.com/docs/authentication/getting-started. You'll need this keyfile later</li>
+<li>Create a billing account for Google Cloud Services (https://console.cloud.google.com/billing).</li>
+<li>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</li>
+<li>Open the API dashboard of your project. Click on Enable API's and choose Translation</li>
+</ul>
 This ends the preparation of the authenticatio and authorization of the translate API at the google side. Congrats! Now we need to tell the Mirror...
  Luckily this is the easier part. 
  <li>
