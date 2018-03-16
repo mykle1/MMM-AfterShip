@@ -267,31 +267,31 @@ Now the infamous keyfile is created. Store carefully, you will need (a copy of) 
 <li>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</li>
 <li>Open the API dashboard of your project. Click on Enable API's and choose Translation</li>
 </ul>
-This ends the preparation of the authenticatio and authorization of the translate API at the google side. Congrats! Now we need to tell the Mirror...
+This ends the preparation of the authentication and authorization of the translate API at the google side of things. Congrats! Now we need to tell the Mirror...
  Luckily this is the easier part. 
  <ul>
  <li> go to the <code>~/MagicMirror/modules/MMM-Parcel</code> directory on your mirror</li>
  <li> transfer the .json file to this directory. (https://www.makeuseof.com/tag/copy-data-raspberry-pi-pc/)</li>
- <li> rename the file to <code>parceltranslate-credentials.json</code> </li>
- <li> check wether this file now exists in your <code>MMM-Parcel</code> directory together with <code>MMM-Parcel.js, node_helper.js</code>, etc.</li>
+ <li> rename the file to <code>parceltranslate-credentials.json</code>. Mind you: exactly this name!</li>
+ <li> check whether this file now exists in your <code>MMM-Parcel</code> directory together with the other files such as <code>MMM-Parcel.js, node_helper.js</code>, etc.</li>
  </ul>
  Now you are set(!) and add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
- Restart the mirror and off you go! 
+ Restart the mirror and off you go! Please know that the miror always saves the last translation done, so if there is no change in deliveries 
+the google API will not be called again. This makes the use of the (paid) translate API independent of the `updateInterval`.
  
  ![](pictures/5.png)
  
-For me I adepted my mirror to Dutch by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
+For me I adapted my mirror to Dutch by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
 ````javascript
 {
 module: 'MMM-Parcel',
-position: 'top_right',	// This can be any of the regions. Best results in left or right regions.
-header: 'Pakjes',   // This is optional
+position: 'top_right',
+header: 'Pakjes',   
 config: {
-	apiKey: 'XXXXXXXXXXXXXX',
+	apiKey: 'XXXXXXXXXXXXXX', // API key of Aftership
 	compactness: -1,
 	autoTranslate: "nl",
 	parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Onderweg", "Ingevoerd", "Wachtend", "Afgeleverd", "Te oud"],
-	parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
 	onlyDaysFormat: 
 		{lastDay : '[gisteren]',
 		 sameDay : '[vandaag]',
@@ -318,8 +318,8 @@ And Yo, see the Dutch mirror:
 ## Newest features
 - autoHide implemented
 - compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
+- possibility to translate the info texts. 
 
 ## Known issues
-- autoHide does not work yet. 
 - Aftership does a good job in collecting  information from the courier but is not perfect. Use the mirror presentation as a hint.
 
