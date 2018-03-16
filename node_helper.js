@@ -45,7 +45,7 @@ module.exports = NodeHelper.create({
 		};
 		
 		if (this.equalsarray(mmparcellastTexts,mstrings)) {
-			console.log("reuse of existing translations") ;
+//			console.log("reuse of existing translations") ;
 			for (i = 0 ; i < mplaces.length ; i++ ) {
 				mmparcelResult.trackings[mplaces[i].p].checkpoints[mplaces[i].cp].message = mmparcellastTrans[i];
 			};
