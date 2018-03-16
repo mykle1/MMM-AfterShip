@@ -74,7 +74,7 @@ Module.register("MMM-Parcel", {
         }
 		
 		var parcelList = this.aftershipResults.trackings;
-		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
+//		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
 
 		//remove expired/delivered deliveries if hideExpired / hideDelivered is true;
 		var l = [];
@@ -85,7 +85,7 @@ Module.register("MMM-Parcel", {
 			};
 			
 			
-		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
+//		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
 		if (l.length == 0) {
 			if (this.config.autoHide && (this.lockStrings.indexOf(this.name) == -1)) {
 			  this.hide(0,{lockString: this.name});
@@ -218,11 +218,28 @@ Module.register("MMM-Parcel", {
 				// last location + location message
 				var infotextwrapper = document.createElement("td");
 				infotextwrapper.colSpan = "2";
-				var extraInfoText = ((lastLoc.city != null)?(lastLoc.city + ", "):"") + 
-					((lastLoc.state != null)?(lastLoc.state + ", "):"") + 
-					lastLoc.country_name + 
-					((lastLoc.message != null)?": ":"") +
-					lastLoc.message ;
+				var extraInfoText = ""; 
+				var sepNeed = false ;
+				if (lastLoc.city != null) {
+					extraInfoText += lastLoc.city ;
+					sepNeed = true ;
+				};
+				if (lastLoc.state != null) {
+					if (sepNeed) { extraInfoText += ","; };
+					extraInfoText += lastLoc.state ;
+					sepNeed = true ;
+				};
+				if (lastLoc.country_name != null) {
+					if (sepNeed) { extraInfoText += ","; };
+					extraInfoText += lastLoc.country_name ;
+					sepNeed = true ;
+				};
+				if (lastLoc.message != null) {
+					if (sepNeed) { extraInfoText += ":"; };
+					extraInfoText += lastLoc.message ;
+					sepNeed = true ;
+				};
+
 				infotextwrapper.innerHTML = extraInfoText ;
 				//change delivered icon color to "OutforDelivery" color if still to be collected
 				if (extraInfoText.indexOf("to be collected") != -1 && p.tag === "Delivered") {

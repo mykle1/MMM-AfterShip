@@ -228,11 +228,86 @@ The following properties can be configured:
 				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>compactness: 0</code>. 
 				 This option does nothing otherwise. 
 			</td>
+		</tr>
+		<tr><code>autoTranslate</code></td>
+			<td>Translate text shown on the infoline in your own language via Google Translate<br>
+				<br><b>Possible values:</b> <code>language string</code> ot <code>false</code> for no Translation Service. 
+				<br><b>Default value:</b> <code>false</code>
+				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code>. 
+			</td>
+		</tr>
 	</tbody>
 </table>
 
+## Auto Translation
+Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometime not.
+the MMM-Parcel module contains a translation feature of these information texts based on Google Translate API. 
+
+<em>Note:</em> Using this API will cost (a low amount of) money so you should carefully install it. Leaving <code>autoTranslate</code> out from the config file
+(or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original mesages and the API will
+ not be used at all by the module. So no worries. You can just skip this part if you are not interested and all will be free. 
+ 
+An example of a non-translated view on the mirror: 
+ 
+![](pictures/4.png)
+
+The infotexts can be automatically translated via Google translate API. For this you need a valid <code>.json</code> keyfile from Google that contains your identity 
+and your Google cloud project. Also the project should be coupled to a Cloud billing account before you can use the API, because the use of Google Translate API
+is not free(!). Google Cloud services provide a free first year subsciption, so you can try! 
+
+Carefully follow the next steps. The goal is to retrieve from google a valid .json file that you can use! 
+<li> 
+<ul>Create or select a your own Google Project Cloud project via https://console.cloud.google.com/ </ul>
+<ul>Create a service account for this project <code>.json</code> file, see https://cloud.google.com/docs/authentication/getting-started. You'll need this keyfile later</ul>
+<ul>Create a billing account for Google Cloud Services (https://console.cloud.google.com/billing).</ul>
+<ul>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</ul>
+<ul>Open the API dashboard of your project. Click on Enable API's and choose Translation</ul>
+</li>
+This ends the preparation of the authenticatio and authorization of the translate API at the google side. Congrats! Now we need to tell the Mirror...
+ Luckily this is the easier part. 
+ <li>
+ <ul> go to the <code>~/MagicMirror/modules/MMM-Parcel</code> directory on your mirror</ul>
+ <ul> transfer the .json file to this directory. (https://www.makeuseof.com/tag/copy-data-raspberry-pi-pc/)</ul>
+ <ul> rename the file to <code>parceltranslate-credentials.json</code> </ul>
+ <ul> check wether this file now exists in your <code>MMM-Parcel</code> directory together with <code>MMM-Parcel.js, node_helper.js</code>, etc.
+ </li>
+ Now you are set(!) and add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
+ Restart the mirror and off you go! 
+ 
+ ![](pictures/5.png)
+ 
+For me I adepted my mirror to Dutch by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
+````javascript
+{
+module: 'MMM-Parcel',
+position: 'top_right',	// This can be any of the regions. Best results in left or right regions.
+header: 'Pakjes',   // This is optional
+config: {
+	apiKey: 'XXXXXXXXXXXXXX',
+	compactness: -1,
+	autoTranslate: "nl",
+	parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Onderweg", "Ingevoerd", "Wachtend", "Afgeleverd", "Te oud"],
+	parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
+	onlyDaysFormat: 
+		{lastDay : '[gisteren]',
+		 sameDay : '[vandaag]',
+		 nextDay : '[morgen]',
+		 lastWeek : '[afgelopen] dddd',
+		 nextWeek : 'dddd',
+		 sameElse : 'L'},
+	expectedDeliveryText: 'Bezorging verwacht: '
+	}
+},
+````
+
+And Yo, see the Dutch mirror:
+
+![] ![](pictures/5.png)
+
+
 ## Dependencies
-- [aftership] (installed via `npm install aftership`)
+- [aftership] (installed via `npm install`)
+- [@google-cloud/translate] (installed via `npm install`)
 - [moment] (already available)
 - font-awesome 4.7.0 (already available)
 
