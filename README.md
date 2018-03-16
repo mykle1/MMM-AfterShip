@@ -25,7 +25,7 @@ And in the very compact view (one-liner per shipment):
 
 * Go into the `~/MagicMirror/modules` directory and do `git clone https://github.com/martinkooij/MMM-Parcel`.
 
-* Go into the MMM-Parcel directory and do `npm install aftership`
+* Go into the MMM-Parcel directory and do `npm install`
 
 * Get an account on aftership.com (Free account is OK if you track less than 100 parcels per month)
 
