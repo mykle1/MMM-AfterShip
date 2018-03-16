@@ -48,6 +48,8 @@ Module.register("MMM-Parcel", {
 		this.sendSocketNotification('AFTERSHIP_FETCHER'); 	
     },
 	
+	heyIamHere: null,
+	
 	suspend : function() {
 		this.sendSocketNotification("INTERVAL_SET", Math.max(900000,this.config.updateInterval*2)) ;
 	},
@@ -66,7 +68,27 @@ Module.register("MMM-Parcel", {
 		const parcelStatustext = this.config.parcelStatusText ;
 		const parcelIconColor = this.config.parcelIconColor;
 
-
+		var now = new Date() ;
+		if (!this.heyIamHere) {
+			this.heyIamHere = now;
+			this.sendSocketNotification("HeyIamhere set 0: ", this.heyIamHere);
+			};
+//		this.sendSocketNotification("HeyIamhere set 1: ", this.heyIamHere + "/" + moment(this.heyIamHere).format("L"));
+		if (moment(now).format("L") != moment(this.heyIamHere).format("L")) {
+			this.heyIamHere.setFullYear(now.getFullYear());
+			this.heyIamHere.setMonth(now.getMonth());
+			this.heyIamHere.setDate(now.getDate());
+			this.heyIamHere.setHours(Math.floor(Math.random() * 17)+6);
+			this.heyIamHere.setMinutes(0);
+			this.heyIamHere.setSeconds(0);
+		};
+		this.sendSocketNotification("HeyIamhere set 2: ", this.heyIamHere);
+		
+		var later = new Date(this.heyIamHere.getTime() + 60*60*1000);
+		var showAnyway = (now >= this.heyIamHere && now <= later) ;
+		
+		this.sendSocketNotification("showanyway :", showAnyway);
+		
         if (!this.loaded) {
             wrapper.innerHTML = "Loading Parcel module...";
             wrapper.classList.add("light", "small");
@@ -90,6 +112,7 @@ Module.register("MMM-Parcel", {
 			if (this.config.autoHide && (this.lockStrings.indexOf(this.name) == -1)) {
 			  this.hide(0,{lockString: this.name});
 			};
+			
 			wrapper.innerHTML = "No Data" ;
             wrapper.classList.add("light", "small");
             return wrapper;			

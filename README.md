@@ -246,9 +246,8 @@ the MMM-Parcel module contains a translation feature of these information texts 
 
 <em>Note:</em> Using the Google Translation API is not completely free, so it is a little more difficult install. Leaving <code>autoTranslate</code> out 
 from the config file
-(or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original mesages and the API will
+(or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original messages and the API will
  not be used at all by the module. So no worries. You can just skip this section if you are not interested and all will be free and easy. 
- Google, by the way, offers the first year of use of the could services (where this API is part of) for free, in case of moderate use. 
  
 An example of a non-translated view on the mirror: 
  
@@ -278,7 +277,7 @@ This ends the preparation of the authentication and authorization of the transla
  </ul>
  Now you are set(!) and add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
  Restart the mirror and off you go! Please know that the miror always saves the last translation done, so if there is no change in deliveries 
-the google API will not be called again. This makes the use of the (paid) translate API independent of the `updateInterval`.
+the google API will not be called again. 
  
  ![](pictures/5.png)
  
@@ -307,7 +306,7 @@ config: {
 
 And Yo, see the Dutch mirror:
 
-![] ![](pictures/6.png)
+![](pictures/6.png)
 
 
 ## Dependencies
