@@ -231,8 +231,8 @@ The following properties can be configured:
 		</tr>
 		<tr> 
 		    <td><code>autoTranslate</code></td>
-			<td>Translate text shown on the infoline in your own language via Google Translate<br>
-				<br><b>Possible values:</b> <code>language string</code> ot <code>false</code> for no Translation Service. 
+			<td>Translate text shown on the infoline into your own language of choice via Google Translate<br>
+				<br><b>Possible values:</b> <code>language string</code>. 
 				<br><b>Default value:</b> <code>false</code>
 				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code>. 
 			</td>
@@ -244,9 +244,10 @@ The following properties can be configured:
 Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometime not.
 the MMM-Parcel module contains a translation feature of these information texts based on Google Translate API. 
 
-<em>Note:</em> Using this API will cost (a low amount of) money so you should carefully install it. Leaving <code>autoTranslate</code> out from the config file
+<em>Note:</em> Using this API will cost (a small amount of) money so you should carefully install it. Leaving <code>autoTranslate</code> out 
+from the config file
 (or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original mesages and the API will
- not be used at all by the module. So no worries. You can just skip this part if you are not interested and all will be free. 
+ not be used at all by the module. So no worries. You can just skip this section if you are not interested and all will be free and easy. 
  
 An example of a non-translated view on the mirror: 
  
@@ -259,7 +260,9 @@ is not free(!). Google Cloud services provide a free first year subsciption, so 
 Carefully follow the next steps. The goal is to retrieve from google a valid .json file that you can use! 
 <ul> 
 <li>Create or select a your own Google Project Cloud project via https://console.cloud.google.com/ </li>
-<li>Create a service account for this project <code>.json</code> file, see https://cloud.google.com/docs/authentication/getting-started. You'll need this keyfile later</li>
+<li>Create a service account for this project <code>.json</code> file, see https://console.cloud.google.com/apis/credentials/serviceaccountkey. 
+Mind that you are in the right project! Choose create a new service account at dropdown, then choose any nice descriptive name and select Role -> Project -> Owner. 
+Now the infamous keyfile is created. Store carefully, you will need (a copy of) this keyfile later</li>
 <li>Create a billing account for Google Cloud Services (https://console.cloud.google.com/billing).</li>
 <li>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</li>
 <li>Open the API dashboard of your project. Click on Enable API's and choose Translation</li>
