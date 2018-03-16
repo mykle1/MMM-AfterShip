@@ -244,10 +244,11 @@ The following properties can be configured:
 Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometime not.
 the MMM-Parcel module contains a translation feature of these information texts based on Google Translate API. 
 
-<em>Note:</em> Using this API will cost (a small amount of) money so you should carefully install it. Leaving <code>autoTranslate</code> out 
+<em>Note:</em> Using the Google Translation API is not completely free, so it is a little more difficult install. Leaving <code>autoTranslate</code> out 
 from the config file
 (or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original mesages and the API will
  not be used at all by the module. So no worries. You can just skip this section if you are not interested and all will be free and easy. 
+ Google, by the way, offers the first year of use of the could services (where this API is part of) for free, in case of moderate use. 
  
 An example of a non-translated view on the mirror: 
  
