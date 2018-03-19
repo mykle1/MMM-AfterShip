@@ -6,20 +6,20 @@
  */
 const NodeHelper = require('node_helper');
 const aftershipSDK = require('aftership');
-//const GTranslateSDK = require('@google-cloud/translate');
 const FREEtranslate = require('google-translate-api') ;
+var fs = require('fs');
+
+//Global variables used by the helper
 var mmparcelResult = {trackings:[]} ;
 var mmparcelUpdateInterval = 30000 ;
 var mmparcelTranslationerrcount = 0 ;
 var mmparcellastTexts = [] ;
 var mmparcellastTrans = [] ;
 var mmparcelforceTrans = {} ;
-var fs = require('fs');
+
 
 
 module.exports = NodeHelper.create({
-	
-	catch_translations: {},
 	
     start: function() {
         console.log("Starting node_helper for: " + this.name);
@@ -43,7 +43,7 @@ module.exports = NodeHelper.create({
 	translateMessage: function(orig,lang,mplace,i) {
 		FREEtranslate(orig, {to: lang}).then(res => {
 				var trans = res.text ;
-				console.log("TRANSLATED: ", orig, 'into ', trans);
+//				console.log("TRANSLATED: ", orig, 'into ', trans);
 				if (mmparcelforceTrans[orig]) { trans = mmparcelforceTrans[orig] } ;
 				mmparcelResult.trackings[mplace.p].checkpoints[mplace.cp].translated_message = trans;
 				mmparcellastTrans[i] = trans
@@ -58,7 +58,6 @@ module.exports = NodeHelper.create({
 			console.log(Date(), "Too many translation API call errors, translations will be stopped (soon) ") ;
 		};
 		
-		console.log("CATCHTRANS:", mmparcelforceTrans);
 		if (data.trackings.length == undefined) {return} ;
 		var mstrings = [] ;
 		var mplaces = [] ;

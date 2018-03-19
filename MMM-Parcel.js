@@ -29,7 +29,8 @@ Module.register("MMM-Parcel", {
 			 lastWeek : '[Last] dddd',
 			 nextWeek : 'dddd',
 			 sameElse : 'L'},
-		expectedDeliveryText: 'Delivery expected: '
+		expectedDeliveryText: 'Delivery expected: ',
+		noParcelText : 'No Shipment Data'
     },
 
     getStyles: function () {
@@ -71,7 +72,7 @@ Module.register("MMM-Parcel", {
 		var now = new Date() ;
 		if (!this.heyIamHere) {
 			this.heyIamHere = now;
-			this.sendSocketNotification("HeyIamhere set 0: ", this.heyIamHere);
+//			this.sendSocketNotification("HeyIamhere set 0: ", this.heyIamHere);
 			};
 //		this.sendSocketNotification("HeyIamhere set 1: ", this.heyIamHere + "/" + moment(this.heyIamHere).format("L"));
 		if (moment(now).format("L") != moment(this.heyIamHere).format("L")) {
@@ -109,7 +110,7 @@ Module.register("MMM-Parcel", {
 			
 //		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
 		if (l.length == 0) {
-			wrapper.innerHTML = "No Shipment Data" ;
+			wrapper.innerHTML = noParcelText ;
 			wrapper.classList.add("light", "small");
 			
 			if (showAnyway) {

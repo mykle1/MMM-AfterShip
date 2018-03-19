@@ -135,7 +135,9 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>false</code>
 				<br><b>Note:</b> Hide module from the mirror when there are no Parcels to be shown. Also reduces the update interval 
-				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest.  
+				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest. 
+				Also it unhides itself and shows "No Shipment Data" on the mirror at a random time between 6AM and 10.30PM for half an hour everyday. This cannot 
+				be surpressed. 
 			</td>
 		</tr>
 		<tr>
