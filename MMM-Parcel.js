@@ -29,7 +29,8 @@ Module.register("MMM-Parcel", {
 			 lastWeek : '[Last] dddd',
 			 nextWeek : 'dddd',
 			 sameElse : 'L'},
-		expectedDeliveryText: 'Delivery expected: '
+		expectedDeliveryText: 'Delivery expected: ',
+		noParcelText : 'No Shipment Data'
     },
 
     getStyles: function () {
@@ -47,6 +48,8 @@ Module.register("MMM-Parcel", {
 		this.sendSocketNotification("INTERVAL_SET", this.config.updateInterval) ;
 		this.sendSocketNotification('AFTERSHIP_FETCHER'); 	
     },
+	
+	heyIamHere: null,
 	
 	suspend : function() {
 		this.sendSocketNotification("INTERVAL_SET", Math.max(900000,this.config.updateInterval*2)) ;
@@ -66,7 +69,27 @@ Module.register("MMM-Parcel", {
 		const parcelStatustext = this.config.parcelStatusText ;
 		const parcelIconColor = this.config.parcelIconColor;
 
-
+		var now = new Date() ;
+		if (!this.heyIamHere) {
+			this.heyIamHere = now;
+//			this.sendSocketNotification("HeyIamhere set 0: ", this.heyIamHere);
+			};
+//		this.sendSocketNotification("HeyIamhere set 1: ", this.heyIamHere + "/" + moment(this.heyIamHere).format("L"));
+		if (moment(now).format("L") != moment(this.heyIamHere).format("L")) {
+			this.heyIamHere.setFullYear(now.getFullYear());
+			this.heyIamHere.setMonth(now.getMonth());
+			this.heyIamHere.setDate(now.getDate());
+			this.heyIamHere.setHours(Math.floor(Math.random() * 17)+6);
+			this.heyIamHere.setMinutes(0);
+			this.heyIamHere.setSeconds(0);
+		};
+		this.sendSocketNotification("HeyIamhere set 2: ", this.heyIamHere);
+		
+		var later = new Date(this.heyIamHere.getTime() + 30*60*1000);
+		var showAnyway = (now >= this.heyIamHere && now <= later) ;
+		
+		this.sendSocketNotification("showanyway :", showAnyway);
+		
         if (!this.loaded) {
             wrapper.innerHTML = "Loading Parcel module...";
             wrapper.classList.add("light", "small");
@@ -74,7 +97,7 @@ Module.register("MMM-Parcel", {
         }
 		
 		var parcelList = this.aftershipResults.trackings;
-		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
+//		this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length) ;
 
 		//remove expired/delivered deliveries if hideExpired / hideDelivered is true;
 		var l = [];
@@ -85,18 +108,26 @@ Module.register("MMM-Parcel", {
 			};
 			
 			
-		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
+//		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
 		if (l.length == 0) {
-			if (this.config.autoHide && (this.lockStrings.indexOf(this.name) == -1)) {
+			wrapper.innerHTML = noParcelText ;
+			wrapper.classList.add("light", "small");
+			
+			if (showAnyway) {
+				if (this.hidden) { 
+					this.show(0,{lockString: this.name});
+				};
+				return wrapper ;
+			};
+
+			if (this.config.autoHide &&	(this.lockStrings.indexOf(this.name) == -1)) {
 			  this.hide(0,{lockString: this.name});
 			};
-			wrapper.innerHTML = "No Data" ;
-            wrapper.classList.add("light", "small");
+			
             return wrapper;			
 		};
 		
 		if (this.config.autoHide && this.hidden) {
-			  this.sendSocketNotification("INTERVALSET", this.config.updateInterval) ;
 			  this.show(0,{lockString: this.name});
 		};	
 		
@@ -218,14 +249,33 @@ Module.register("MMM-Parcel", {
 				// last location + location message
 				var infotextwrapper = document.createElement("td");
 				infotextwrapper.colSpan = "2";
-				var extraInfoText = ((lastLoc.city != null)?(lastLoc.city + ", "):"") + 
-					((lastLoc.state != null)?(lastLoc.state + ", "):"") + 
-					lastLoc.country_name + 
-					((lastLoc.message != null)?": ":"") +
-					lastLoc.message ;
+
+				var extraInfoText = "";
+				var message = (lastLoc.translated_message)?lastLoc.translated_message:lastLoc.message;
+				var sepNeed = false ;
+				if (lastLoc.city != null) {
+					extraInfoText += lastLoc.city ;
+					sepNeed = true ;
+				};
+				if (lastLoc.state != null) {
+					if (sepNeed) { extraInfoText += ","; };
+					extraInfoText += lastLoc.state ;
+					sepNeed = true ;
+				};
+				if (lastLoc.country_name != null) {
+					if (sepNeed) { extraInfoText += ","; };
+					extraInfoText += lastLoc.country_name ;
+					sepNeed = true ;
+				};
+				if (message != null) {
+					if (sepNeed) { extraInfoText += ":"; };
+					extraInfoText += message ;
+					sepNeed = true ;
+				};
+
 				infotextwrapper.innerHTML = extraInfoText ;
 				//change delivered icon color to "OutforDelivery" color if still to be collected
-				if (extraInfoText.indexOf("to be collected") != -1 && p.tag === "Delivered") {
+				if (p.message && p.message.indexOf("to be collected") != -1 && p.tag === "Delivered") {
 					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("OutForDelivery")];
 				}
 				parcelWrapperinfoline.appendChild(infotextwrapper);

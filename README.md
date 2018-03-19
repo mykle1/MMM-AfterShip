@@ -25,7 +25,7 @@ And in the very compact view (one-liner per shipment):
 
 * Go into the `~/MagicMirror/modules` directory and do `git clone https://github.com/martinkooij/MMM-Parcel`.
 
-* Go into the MMM-Parcel directory and do `npm install aftership`
+* Go into the MMM-Parcel directory and do `npm install`
 
 * Get an account on aftership.com (Free account is OK if you track less than 100 parcels per month)
 
@@ -36,6 +36,11 @@ And in the very compact view (one-liner per shipment):
 * Add your own trackings
 
 * Tell me what you like, or any issues you have. It is difficult to test as I cannot control or test all variations from AfterShip. 
+
+## Updates
+Do a `git pull` in the MMM-Parcel module directory. Running a `npm install` again in the same directory is recommended and does no harm. 
+In case supporting features need new packages, such as when you upgrade to a version 
+with the automatic translations feature, the `npm install` is really needed.  
 
 ## Using the module
 
@@ -66,7 +71,8 @@ config: {
 	  nextWeek : 'dddd',
 	  sameElse : 'L'
 	  }, // formatting when only days are shown and time is unknown. 
-	expectedDeliveryText: 'Delivery Expected: '	 // This is the default. Changes time infoline. 
+	expectedDeliveryText: 'Delivery Expected: ',	 // This is the default. Changes time infoline. 
+    noParcelText: 'No Shipment Data'	 // This is the default. Changes infoline in case of no trackings. 
 	}
 },
 ````
@@ -129,7 +135,9 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
 				<br><b>Default value:</b> <code>false</code>
 				<br><b>Note:</b> Hide module from the mirror when there are no Parcels to be shown. Also reduces the update interval 
-				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest.  
+				to minimally every 15 minutes or else 2 times the configured <code>updateInterval</code> whichever one is the longest. 
+				Also it unhides itself and shows "No Shipment Data" on the mirror at a random time between 6AM and 10.30PM for half an hour everyday. This cannot 
+				be surpressed. 
 			</td>
 		</tr>
 		<tr>
@@ -228,19 +236,94 @@ The following properties can be configured:
 				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>compactness: 0</code>. 
 				 This option does nothing otherwise. 
 			</td>
+		</tr>
+		<tr>
+			<td><code>noParcelText</code></td>
+			<td>Text to show when there are no trackings to show<br>
+				<br><b>Possible values:</b> <code>string</code>
+				<br><b>Default value:</b> <code>"No Shipment Data"</code>
+				<br><b>Example:</b> Use "Geen Data" in Dutch for example.
+			</td>
+		</tr>
+		<tr> 
+		    <td><code>autoTranslate</code></td>
+			<td>Translate text shown on the infoline into your own language of choice via Google Translate free API<br>
+				<br><b>Possible values:</b> <code>language string</code>. 
+				<br><b>Default value:</b> <code>false</code>
+				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code> or if the option is absent. 
+			</td>
+		</tr>
 	</tbody>
 </table>
 
+## Auto Translation
+Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometimes not.
+the MMM-Parcel module contains a translation feature of these information texts based on a free Google Translate API. This only works if <code>autoTranslate</code>
+is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be called if <code>autoTranslate</code> is
+absent or set to <code>false</code>. 
+ 
+An example of a non-translated view on the mirror: 
+ 
+![](pictures/4.png)
+
+The infotexts can be automatically translated via Google translate API. 
+Add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
+ Restart the mirror and off you go! The translation API is only called when there is a change in the deliveries.  
+ 
+ ![](pictures/5.png)
+
+I adapted my mirror module to be a Dutch mirror by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
+````javascript
+{
+module: 'MMM-Parcel',
+position: 'top_right',
+header: 'Pakjes',   
+config: {
+	apiKey: 'XXXXXXXXXXXXXX', // API key of Aftership
+	compactness: -1,
+	autoTranslate: "nl",
+	parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Onderweg", "Ingevoerd", "Wachtend", "Afgeleverd", "Te oud"],
+	onlyDaysFormat: 
+		{lastDay : '[gisteren]',
+		 sameDay : '[vandaag]',
+		 nextDay : '[morgen]',
+		 lastWeek : '[afgelopen] dddd',
+		 nextWeek : 'dddd',
+		 sameElse : 'L'},
+	expectedDeliveryText: 'Bezorging verwacht: ',
+	noParcelText: 'Geen Data'
+	}
+},
+````
+
+And Yo, see the Dutch mirror:
+
+![](pictures/6.png)
+
+<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory called <code>force_trans.json</code>
+Don't worry, the file, if it exists, is ignored by `git pull` so will not be overwritten by an update. The file is a JSON formatted text file 
+(don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The translation translates complete message entries not word by word. 
+Example:
+````
+{
+"Departed" : "Vertrokken", 
+"Processed Through Facility": "Verwerkt in sorteercentrum"
+}
+````
+
 ## Dependencies
-- [aftership] (installed via `npm install aftership`)
+- [aftership] (installed via `npm install`)
+- [google-translate-api] (installed via `npm install`)
 - [moment] (already available)
 - font-awesome 4.7.0 (already available)
 
 ## Newest features
 - autoHide implemented
 - compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
+- possibility to translate the info texts. 
 
 ## Known issues
-- autoHide does not work yet. 
 - Aftership does a good job in collecting  information from the courier but is not perfect. Use the mirror presentation as a hint.
+- On full mirrors with many modules the google API translations (if set) sometimes arrive just after the visual update during start-up. 
+No problem, in the next update cycle the translations are picked up. And a mirror is only booted up once a month or less no?
 
