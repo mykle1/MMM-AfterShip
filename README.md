@@ -298,7 +298,7 @@ And Yo, see the Dutch mirror:
 
 ![](pictures/6.png)
 
-<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory calle <code>force_trans.json</code>
+<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory called <code>force_trans.json</code>
 Don't worry, the file, if it exists, is ignored by `git pull` so will not be overwritten by an update. The file is a JSON formatted text file 
 (don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The translation translates complete message entries not word by word. 
 Example:
