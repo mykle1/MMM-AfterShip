@@ -84,7 +84,7 @@ Module.register("MMM-Parcel", {
 		};
 		this.sendSocketNotification("HeyIamhere set 2: ", this.heyIamHere);
 		
-		var later = new Date(this.heyIamHere.getTime() + 60*60*1000);
+		var later = new Date(this.heyIamHere.getTime() + 30*60*1000);
 		var showAnyway = (now >= this.heyIamHere && now <= later) ;
 		
 		this.sendSocketNotification("showanyway :", showAnyway);
@@ -109,17 +109,24 @@ Module.register("MMM-Parcel", {
 			
 //		this.sendSocketNotification("AUTOHIDE:", this.config.autoHide.toString() + ", " + this.name + ", " + JSON.stringify(this.lockStrings)) ;				
 		if (l.length == 0) {
-			if (this.config.autoHide && (this.lockStrings.indexOf(this.name) == -1)) {
+			wrapper.innerHTML = "No Shipment Data" ;
+			wrapper.classList.add("light", "small");
+			
+			if (showAnyway) {
+				if (this.hidden) { 
+					this.show(0,{lockString: this.name});
+				};
+				return wrapper ;
+			};
+
+			if (this.config.autoHide &&	(this.lockStrings.indexOf(this.name) == -1)) {
 			  this.hide(0,{lockString: this.name});
 			};
 			
-			wrapper.innerHTML = "No Data" ;
-            wrapper.classList.add("light", "small");
             return wrapper;			
 		};
 		
 		if (this.config.autoHide && this.hidden) {
-			  this.sendSocketNotification("INTERVALSET", this.config.updateInterval) ;
 			  this.show(0,{lockString: this.name});
 		};	
 		
@@ -241,7 +248,9 @@ Module.register("MMM-Parcel", {
 				// last location + location message
 				var infotextwrapper = document.createElement("td");
 				infotextwrapper.colSpan = "2";
-				var extraInfoText = ""; 
+
+				var extraInfoText = "";
+				var message = (lastLoc.translated_message)?lastLoc.translated_message:lastLoc.message;
 				var sepNeed = false ;
 				if (lastLoc.city != null) {
 					extraInfoText += lastLoc.city ;
@@ -257,15 +266,15 @@ Module.register("MMM-Parcel", {
 					extraInfoText += lastLoc.country_name ;
 					sepNeed = true ;
 				};
-				if (lastLoc.message != null) {
+				if (message != null) {
 					if (sepNeed) { extraInfoText += ":"; };
-					extraInfoText += lastLoc.message ;
+					extraInfoText += message ;
 					sepNeed = true ;
 				};
 
 				infotextwrapper.innerHTML = extraInfoText ;
 				//change delivered icon color to "OutforDelivery" color if still to be collected
-				if (extraInfoText.indexOf("to be collected") != -1 && p.tag === "Delivered") {
+				if (p.message && p.message.indexOf("to be collected") != -1 && p.tag === "Delivered") {
 					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("OutForDelivery")];
 				}
 				parcelWrapperinfoline.appendChild(infotextwrapper);

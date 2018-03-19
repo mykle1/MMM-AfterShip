@@ -37,6 +37,11 @@ And in the very compact view (one-liner per shipment):
 
 * Tell me what you like, or any issues you have. It is difficult to test as I cannot control or test all variations from AfterShip. 
 
+## Updates
+Do a `git pull` in the MMM-Parcel module directory. Running a `npm install` again in the same directory is recommended and does no harm. 
+In case supporting features need new packages, such as when you upgrade to a version 
+with the automatic translations feature, the `npm install` is really needed.  
+
 ## Using the module
 
 To use this module, add it to the modules array in the `config/config.js` file:
@@ -66,7 +71,8 @@ config: {
 	  nextWeek : 'dddd',
 	  sameElse : 'L'
 	  }, // formatting when only days are shown and time is unknown. 
-	expectedDeliveryText: 'Delivery Expected: '	 // This is the default. Changes time infoline. 
+	expectedDeliveryText: 'Delivery Expected: ',	 // This is the default. Changes time infoline. 
+    noParcelText: 'No Shipment Data'	 // This is the default. Changes infoline in case of no trackings. 
 	}
 },
 ````
@@ -229,9 +235,17 @@ The following properties can be configured:
 				 This option does nothing otherwise. 
 			</td>
 		</tr>
+		<tr>
+			<td><code>noParcelText</code></td>
+			<td>Text to show when there are no trackings to show<br>
+				<br><b>Possible values:</b> <code>string</code>
+				<br><b>Default value:</b> <code>"No Shipment Data"</code>
+				<br><b>Example:</b> Use "Geen Data" in Dutch for example.
+			</td>
+		</tr>
 		<tr> 
 		    <td><code>autoTranslate</code></td>
-			<td>Translate text shown on the infoline into your own language of choice via Google Translate<br>
+			<td>Translate text shown on the infoline into your own language of choice via Google Translate free API<br>
 				<br><b>Possible values:</b> <code>language string</code>. 
 				<br><b>Default value:</b> <code>false</code>
 				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code>. 
@@ -241,47 +255,22 @@ The following properties can be configured:
 </table>
 
 ## Auto Translation
-Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometime not.
-the MMM-Parcel module contains a translation feature of these information texts based on Google Translate API. 
-
-<em>Note:</em> Using the Google Translation API is not completely free, so it is a little more difficult install. Leaving <code>autoTranslate</code> out 
-from the config file
-(or set <code>autoTranslate: false</code>, which amounts to the same) and the module will just show the original messages and the API will
- not be used at all by the module. So no worries. You can just skip this section if you are not interested and all will be free and easy. 
+Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometimes not.
+the MMM-Parcel module contains a translation feature of these information texts based on a free Google Translate API. This only works if <code>autoTranslate</code>
+is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be caled if <code>autoTranslate</code> is
+absent or set to <code>false</code>. 
  
 An example of a non-translated view on the mirror: 
  
 ![](pictures/4.png)
 
-The infotexts can be automatically translated via Google translate API. For this you need a valid <code>.json</code> keyfile from Google that contains your identity 
-and your Google cloud project. Also the project should be coupled to a Cloud billing account before you can use the API, because the use of Google Translate API
-is not free(!). Google Cloud services provide a free first year subsciption, so you can try! 
-
-Carefully follow the next steps. The goal is to retrieve from google a valid .json file that you can use! 
-<ul> 
-<li>Create or select a your own Google Project Cloud project via https://console.cloud.google.com/ </li>
-<li>Create a service account for this project <code>.json</code> file, see https://console.cloud.google.com/apis/credentials/serviceaccountkey. 
-Mind that you are in the right project! Choose create a new service account at dropdown, then choose any nice descriptive name and select Role -> Project -> Owner. 
-Now the infamous keyfile is created. Store carefully, you will need (a copy of) this keyfile later</li>
-<li>Create a billing account for Google Cloud Services (https://console.cloud.google.com/billing).</li>
-<li>Open the API dashboard of your project (https://console.cloud.google.com/apis/). Go to the console left side menu and select Billing. Link your Billing account.</li>
-<li>Open the API dashboard of your project. Click on Enable API's and choose Translation</li>
-</ul>
-This ends the preparation of the authentication and authorization of the translate API at the google side of things. Congrats! Now we need to tell the Mirror...
- Luckily this is the easier part. 
- <ul>
- <li> go to the <code>~/MagicMirror/modules/MMM-Parcel</code> directory on your mirror</li>
- <li> transfer the .json file to this directory. (https://www.makeuseof.com/tag/copy-data-raspberry-pi-pc/)</li>
- <li> rename the file to <code>parceltranslate-credentials.json</code>. Mind you: exactly this name!</li>
- <li> check whether this file now exists in your <code>MMM-Parcel</code> directory together with the other files such as <code>MMM-Parcel.js, node_helper.js</code>, etc.</li>
- </ul>
- Now you are set(!) and add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
- Restart the mirror and off you go! Please know that the miror always saves the last translation done, so if there is no change in deliveries 
-the google API will not be called again. 
+The infotexts can be automatically translated via Google translate API. 
+Add for example <code>autoTranslate : "en",</code> in the <code>config.js</code> file in the MMM-Parcel descriptions. 
+ Restart the mirror and off you go! The translation API is only called when there is a change in the deliveries.  
  
  ![](pictures/5.png)
- 
-For me I adapted my mirror to Dutch by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
+
+I adapted my mirror module to be a Dutch mirror by setting Dutch language settings and autoTranslate to <code>"nl"</code> in the config:
 ````javascript
 {
 module: 'MMM-Parcel',
@@ -299,7 +288,8 @@ config: {
 		 lastWeek : '[afgelopen] dddd',
 		 nextWeek : 'dddd',
 		 sameElse : 'L'},
-	expectedDeliveryText: 'Bezorging verwacht: '
+	expectedDeliveryText: 'Bezorging verwacht: ',
+	noParcelText: 'Geen Data'
 	}
 },
 ````
@@ -308,10 +298,20 @@ And Yo, see the Dutch mirror:
 
 ![](pictures/6.png)
 
+<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory calle <code>force_trans.json</code>
+Don't worry, the file, if it exists, is ignored by `git pull` so will not be overwritten by an update. The file is a JSON formatted text file 
+(don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The traslation translates complete message entries not word by word. 
+Example:
+````
+{
+"Departed" : "Vertrokken", 
+"Processed Through Facility": "Verwerkt in sorteercentrum"
+}
+````
 
 ## Dependencies
 - [aftership] (installed via `npm install`)
-- [@google-cloud/translate] (installed via `npm install`)
+- [google-translate-api] (installed via `npm install`)
 - [moment] (already available)
 - font-awesome 4.7.0 (already available)
 
@@ -322,4 +322,6 @@ And Yo, see the Dutch mirror:
 
 ## Known issues
 - Aftership does a good job in collecting  information from the courier but is not perfect. Use the mirror presentation as a hint.
+- On full mirrors with many modules the google API translations (if set) sometimes arrive just after the visual update during start-up. 
+No problem, in the next update cycle the translations are picked up. And a mirror is only booted up once a month or less no?
 

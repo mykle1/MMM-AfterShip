@@ -6,17 +6,30 @@
  */
 const NodeHelper = require('node_helper');
 const aftershipSDK = require('aftership');
-const GTranslateSDK = require('@google-cloud/translate');
+//const GTranslateSDK = require('@google-cloud/translate');
+const FREEtranslate = require('google-translate-api') ;
 var mmparcelResult = {trackings:[]} ;
 var mmparcelUpdateInterval = 30000 ;
 var mmparcelTranslationerrcount = 0 ;
 var mmparcellastTexts = [] ;
 var mmparcellastTrans = [] ;
+var mmparcelforceTrans = {} ;
+var fs = require('fs');
+
 
 module.exports = NodeHelper.create({
 	
+	catch_translations: {},
+	
     start: function() {
         console.log("Starting node_helper for: " + this.name);
+		fs.readFile('modules/'+this.name+'/force_trans.json', 'utf8', function (err, data) {
+			if (!err) {
+				mmparcelforceTrans = JSON.parse(data);
+			} else {
+			console.log('Message ' + this.name + ': no "force_trans.json" translation file found. This is no problem')
+			}
+		});
     },
 
 	equalsarray: function(a,b) {
@@ -27,14 +40,28 @@ module.exports = NodeHelper.create({
 		return true ;
 	},
 	
+	translateMessage: function(orig,lang,mplace,i) {
+		FREEtranslate(orig, {to: lang}).then(res => {
+				var trans = res.text ;
+				console.log("TRANSLATED: ", orig, 'into ', trans);
+				if (mmparcelforceTrans[orig]) { trans = mmparcelforceTrans[orig] } ;
+				mmparcelResult.trackings[mplace.p].checkpoints[mplace.cp].translated_message = trans;
+				mmparcellastTrans[i] = trans
+			}).catch(err => {
+				console.error(err);
+			});
+	},
+	
 	translate: function(data,lang) {
 		if (mmparcelTranslationerrcount > 100) {return;};
 	    if (mmparcelTranslationerrcount > 97) { 
 			console.log(Date(), "Too many translation API call errors, translations will be stopped (soon) ") ;
 		};
+		
+		console.log("CATCHTRANS:", mmparcelforceTrans);
 		if (data.trackings.length == undefined) {return} ;
-		mstrings = [] ;
-		mplaces = [] ;
+		var mstrings = [] ;
+		var mplaces = [] ;
 		for (var i = 0 ; i < data.trackings.length; i++) {
 			var j = data.trackings[i].checkpoints.length;
 
@@ -43,28 +70,21 @@ module.exports = NodeHelper.create({
 			mstrings.push(data.trackings[i].checkpoints[j-1].message);
 			mplaces.push({p:i,cp: j-1});
 		};
-		
 		if (this.equalsarray(mmparcellastTexts,mstrings)) {
-//			console.log("reuse of existing translations") ;
+			console.log("reuse of existing translations") ;
 			for (i = 0 ; i < mplaces.length ; i++ ) {
-				mmparcelResult.trackings[mplaces[i].p].checkpoints[mplaces[i].cp].message = mmparcellastTrans[i];
+				mmparcelResult.trackings[mplaces[i].p].checkpoints[mplaces[i].cp].translated_message = mmparcellastTrans[i];
 			};
 			return;
 		};
 			
-		var translateAPI = GTranslateSDK( {keyFilename : "modules/" + this.name + "/parceltranslate-credentials.json"} ) ;
-		translateAPI.translate(mstrings,lang, function(err, translation) {
-				if (!err) {
-					mmparcellastTexts = mstrings;
-					mmparcellastTrans = translation;
-					console.log("set  translations via Google API") ;
-					for (i = 0 ; i < mplaces.length ; i++ ) {
-						mmparcelResult.trackings[mplaces[i].p].checkpoints[mplaces[i].cp].message = translation[i];
-					};
-				} else {
-					console.log(err);
-				}
-		});
+		mmparcellastTexts = mstrings.slice();
+		mmparcellastTrans = mstrings.slice();
+		for (i = 0 ; i < mplaces.length ; i++ ) {
+			this.translateMessage(mstrings[i],lang, mplaces[i],i);
+		};
+		
+		console.log("set  translations via Google free API") ;	
 	},
 			
 				

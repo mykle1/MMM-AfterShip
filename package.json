@@ -25,7 +25,8 @@
   "homepage": "https://github.com/martinkooij/MMM-Parcel#readme",
   "dependencies": {
     "@google-cloud/translate": "^1.1.0",
-    "aftership": "latest"
+    "aftership": "latest",
+    "google-translate-api": "^2.3.0"
   },
   "main": "MMM-Parcel.js",
   "scripts": {
