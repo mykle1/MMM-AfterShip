@@ -72,9 +72,8 @@ Module.register("MMM-Parcel", {
 		var now = new Date() ;
 		if (!this.heyIamHere) {
 			this.heyIamHere = now;
-//			this.sendSocketNotification("HeyIamhere set 0: ", this.heyIamHere);
 			};
-//		this.sendSocketNotification("HeyIamhere set 1: ", this.heyIamHere + "/" + moment(this.heyIamHere).format("L"));
+
 		if (moment(now).format("L") != moment(this.heyIamHere).format("L")) {
 			this.heyIamHere.setFullYear(now.getFullYear());
 			this.heyIamHere.setMonth(now.getMonth());
@@ -83,12 +82,11 @@ Module.register("MMM-Parcel", {
 			this.heyIamHere.setMinutes(0);
 			this.heyIamHere.setSeconds(0);
 		};
-		this.sendSocketNotification("HeyIamhere set 2: ", this.heyIamHere);
-		
+
 		var later = new Date(this.heyIamHere.getTime() + 30*60*1000);
 		var showAnyway = (now >= this.heyIamHere && now <= later) ;
 		
-		this.sendSocketNotification("showanyway :", showAnyway);
+//		this.sendSocketNotification("showanyway :", showAnyway);
 		
         if (!this.loaded) {
             wrapper.innerHTML = "Loading Parcel module...";
