@@ -248,7 +248,7 @@ The following properties can be configured:
 			<td>Translate text shown on the infoline into your own language of choice via Google Translate free API<br>
 				<br><b>Possible values:</b> <code>language string</code>. 
 				<br><b>Default value:</b> <code>false</code>
-				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code>. 
+				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code> or if the option is absent. 
 			</td>
 		</tr>
 	</tbody>
@@ -257,7 +257,7 @@ The following properties can be configured:
 ## Auto Translation
 Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometimes not.
 the MMM-Parcel module contains a translation feature of these information texts based on a free Google Translate API. This only works if <code>autoTranslate</code>
-is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be caled if <code>autoTranslate</code> is
+is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be calded if <code>autoTranslate</code> is
 absent or set to <code>false</code>. 
  
 An example of a non-translated view on the mirror: 
@@ -300,7 +300,7 @@ And Yo, see the Dutch mirror:
 
 <em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory calle <code>force_trans.json</code>
 Don't worry, the file, if it exists, is ignored by `git pull` so will not be overwritten by an update. The file is a JSON formatted text file 
-(don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The traslation translates complete message entries not word by word. 
+(don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The translation translates complete message entries not word by word. 
 Example:
 ````
 {
