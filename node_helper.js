@@ -7,7 +7,7 @@
 const NodeHelper = require('node_helper');
 const aftershipSDK = require('aftership');
 const FREEtranslate = require('google-translate-api') ;
-var fs = require('fs');
+const fs = require('fs');
 
 //Global variables used by the helper
 var mmparcelResult = {trackings:[]} ;
@@ -42,20 +42,21 @@ module.exports = NodeHelper.create({
 	
 	translateMessage: function(orig,lang,mplace,i) {
 		FREEtranslate(orig, {to: lang}).then(res => {
-				var trans = res.text ;
+				var trans = mmparcelforceTrans[orig] || res.text ;
 //				console.log("TRANSLATED: ", orig, 'into ', trans);
-				if (mmparcelforceTrans[orig]) { trans = mmparcelforceTrans[orig] } ;
 				mmparcelResult.trackings[mplace.p].checkpoints[mplace.cp].translated_message = trans;
-				mmparcellastTrans[i] = trans
+				mmparcellastTrans[i] = trans;
+				mmparcelTranslationerrcount = 0 ;
 			}).catch(err => {
+				mmparcelTranslationerrcount++
 				console.error(err);
 			});
 	},
 	
 	translate: function(data,lang) {
 		if (mmparcelTranslationerrcount > 100) {return;};
-	    if (mmparcelTranslationerrcount > 97) { 
-			console.log(Date(), "Too many translation API call errors, translations will be stopped (soon) ") ;
+	    if (mmparcelTranslationerrcount > 90) { 
+			console.log(Date(), "Too many translation API call errors, translations will be stopped (soon) ", 100 - mmparcelTranslationerrcount) ;
 		};
 		
 		if (data.trackings.length == undefined) {return} ;
