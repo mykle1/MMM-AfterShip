@@ -210,7 +210,7 @@ The following properties can be configured:
 				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
 				<br><b>Note:</b> If the extra info line (whether visible or not) contains the text "to be collected" the parcel is marked as delivered but should still be collected. 
 				To make that visible the icon color of the delivered icon changes in that case
-				to the color of <code>OutforDelivery</code> status. Default: from </code>"grey"</code> to <code>"cornflowerblue"</code>. 
+				to the color of <code>OutforDelivery</code> status. 
 			</td>
 		</tr>	
 		<tr>
