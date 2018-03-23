@@ -71,7 +71,6 @@ module.exports = NodeHelper.create({
             mplaces.push({p:i,cp: j-1});
         };
         if (this.equalsarray(lastTexts,mstrings)) {
-            console.log("reuse of existing translations");
             for (i = 0; i < mplaces.length; i++ ) {
                 parcelResult.trackings[mplaces[i].p].checkpoints[mplaces[i].cp].translated_message = lastTrans[i];
             };
@@ -82,9 +81,7 @@ module.exports = NodeHelper.create({
         lastTrans = mstrings.slice();
         for (i = 0; i < mplaces.length; i++ ) {
             this.translateMessage(mstrings[i],lang, mplaces[i],i);
-        };
-        
-        console.log("set  translations via Google free API");    
+        };  
     },
             
                 
