@@ -178,13 +178,9 @@ Module.register("MMM-Parcel", {
                 var deliverywrapper = document.createElement("td");
                 deliverywrapper.innerHTML = "";
 				var clockTime = p.expected_delivery;
-				if ( !(clockTime) && ( p.tag === "Delivered") && lastLoc ){
+				if ( !(clockTime) && lastLoc && (lastLoc.checkpoint_time) ){
                     clockTime = lastLoc.checkpoint_time;
-                }
-				if ( !(clockTime) && lastLoc && (lastLoc.checkpoint_time) && 
-                     (moment().diff(moment(lastLoc.checkpoint_time),'days') > 3 )){
-                   clockTime = lastLoc.checkpoint_time;
-                }				   
+                }	   
                 if ( clockTime ) {
                     if (!isCompact) {
                         if (clockTime.includes("T")) {
