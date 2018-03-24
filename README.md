@@ -318,9 +318,15 @@ Example:
 - font-awesome 4.7.0 (already available)
 
 ## Newest features
-- autoHide implemented
-- compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
 - possibility to translate the info texts. 
+- compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
+- autoHide implemented
+
+## Latest Releases
+- version 1.2.2. Bug fixed, code linting, now displays time of latest checkpoint when no expected delivery is (yet) known. 
+                 Message line before clock line.
+- version 1.2.1. Removed spurious debug info to log files
+- version 1.2.0. Functional release (adding translations, autohide and automatic compactness)
 
 ## Known issues
 - Aftership does a good job in collecting  information from the courier but is not perfect. Use the mirror presentation as a hint.
