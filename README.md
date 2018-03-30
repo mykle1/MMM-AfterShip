@@ -58,7 +58,7 @@ config: {
 	isSorted: true,  // sort on delivery Status (most important ones first)
 	compactness: -1, // 0 = elaborate, 1 = compact display, 2 = very compact, one-liner per shipment, -1 = automatic
 	hideExpired: true, // don't show expired parcels
-	hideDelivered: false, // determines whether to show delivered parcels. Not recommended to hide. 
+	hideDelivered: 15, // Hide delivered parcels after 15 days. 
 	updateInterval: 600000, // 10 minutes = 10 * 60 * 1000 milliseconds. 
 	parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", 
 	                   "Info Received", "Pending", "Delivered", "Expired"], // This is the default. Enter your own language text
@@ -91,10 +91,9 @@ config: {
 },
 ````
 
-## Configuration options
+## Basic configuration options
 
 The following properties can be configured:
-
 
 <table width="100%">
 	<!-- why, markdown... -->
@@ -130,6 +129,86 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>hideDelivered</code></td>
+			<td>Determines how many days parcels with status "Delivered" should be shown.<br>
+				<br><b>Possible values:</b> <code>integer</code> or <code>boolean</code>
+				<br><b>Default value:</b> <code>false</code>
+				<br><b>Examples:</b> When `boolean` the config parameter determines whether delivered packages are hidden. The default is 
+				<code>false</code> which means "not hidden". When using an `integer` the parameter value indicates for how many days delivered 
+				parcels should be shown.  A value of <code>10</code> means "hide the Delivered Packages after 10 days".
+			</td>
+		</tr>
+		<tr>
+			<td><code>updateInterval</code></td>
+			<td>Time between requests to the API in milliseconds<br>
+				<br><b>Possible values:</b> <code>int</code>
+				<br><b>Default value:</b> <code>600000</code> =10 minutes.
+				<br><b>Note:</b> Internally the module sets 60000 (1 minute) as an absolute lower bound, whatever the config value is. Don't overload the API!
+			</td>
+		</tr>
+				<tr>
+			<td><code>maxWidth</code></td>
+			<td>Set the  width of your module on the screen in pixels.<br>
+				<br><b>Possible values:</b> <code>string</code> 
+				<br><b>Default value:</b> <code>"450px"</code>
+				<br><b>Note:</b> The module will automatically adapt the layout to fit better in a narrower space, when the space given 
+				in maxWidth is narrower than 400px.
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+## Advanced Options and Language Options
+
+<table>
+	<!-- why, markdown... -->
+	<thead>
+		<tr>
+			<th>Option</th>
+			<th width="100%">Description</th>
+		</tr>
+	<thead>
+	<tbody>
+		<tr>
+			<td><code>compactness</code></td>
+			<td>Determines whether the expected delivery time (if known for the parcel) is shown on a separate line or on the same line 
+			     as the parcel header (see example pictures). <br>
+				<br><b>Possible values:</b> <code>-1</code>, <code>0</code>, <code>1</code> or <code>2</code>
+				<br><b>Default value:</b> <code>-1</code>
+				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if present) on a separate line.
+				it also displays a separate info line on the latest checkpoint (if present).
+				<code>1</code> shows a more compact version and <code>2</code> effectively makes it a one-liner per shipment. 
+				<code>-1</code> (=automatic) takes a compactness depending on the #parcels shown 
+				   (<code>0</code> when <=3, <code>1</code> when <=6, <code>2</code> in case of long lists). 
+				   It mostly has a "vertical" effect (the higher the compactness level, the less lines it takes on the mirror). 
+			</td>
+		</tr>
+		<tr>
+			<td><code>forceNarrow, forceWide</code></td>
+	<td> Manually set the layout for the width. Set <em>one</em> of the two or <em>none</em> (default).<br>
+				<br><b>Possible values:</b> <code>true</code> (or <code>false</code>)
+				<br><b> Default value:</b> None set. 
+				<br><b>Example:</b> <code>forceNarrow: true</code>, when set forces a "narrow" layout (= the layout used when maxWidth <400px) even 
+				when the module is give a space of 400 pixels or wider. Setting <code>forceWide: true</code> does the reverse. 
+				The "narrow" vs "wide" layout mainly has a "horizontal" effect. It changes the layout to fit better in narrow spaces or wider spaces
+				respectively.
+				<br><b>Note:</b> Playing with manually set compactness and "narrowness" is possible, however the default automatic behavior should 
+				be working for most. 
+			</td>
+		</tr>
+		<tr>
+			<td><code>isSorted</code></td>
+			<td>Parcels are shown in a sorted order depending on status. The module implements a fixed --non-configurable-- sort order 
+			    for the parcel statuses from the API. The order is:	<code>Exception</code>, <code>AttemptFail</code>,
+			    <code>OutForDelivery</code>, <code>InTransit</code>, <code>InfoReceived</code>, 
+				<code>Pending</code>, <code>Delivered</code>, <code>Expired</code><br>
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
+				<br><b>Default value:</b> <code>true</code>
+				<br><b>Note:</b> Exceptions first, Expired last. Sort is according to urgency of action needed from the receiver. If not sorted 
+				the ordering is the ordering as received by the API of Aftership.com. 
+			</td>
+		</tr>
+		<tr>
 			<td><code>autoHide</code></td>
 			<td>The module hides itself when there are no parcels found<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
@@ -141,30 +220,6 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>isSorted</code></td>
-			<td>Parcels are shown in a sorted order depending on status. The module implements a fixed --non-configurable-- sort order 
-			    for the parcel statuses from the API. The order is:	<code>Exception</code>, <code>AttemptFail</code>,
-			    <code>OutForDelivery</code>, <code>InTransit</code>, <code>InfoReceived</code>, 
-				<code>Pending</code>, <code>Delivered</code>, <code>Expired</code><br>
-				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
-				<br><b>Default value:</b> <code>true</code>
-				<br><b>Note:</b> Exceptions first, Expired last. Sort is according to urgency of action needed from the receiver. 
-			</td>
-		</tr>
-		<tr>
-			<td><code>compactness</code></td>
-			<td>Determines whether the expected delivery time (if known for the parcel) is shown on a separate line or on the same line 
-			     as the parcel header (see pictures for example). <br>
-				<br><b>Possible values:</b> <code>-1</code>, <code>0</code>, <code>1</code> or <code>2</code>
-				<br><b>Default value:</b> <code>-1</code>
-				<br><b>Note:</b> <code>0</code> displays the shipment with expected delivery time (if present) on a separate line.
-				it also displays a separate info line on the latest checkpoint (if present).
-				<code>1</code> shows a more compact version and <code>2</code> effectively makes it a one-liner per shipment. 
-				<code>-1</code> (=automatic) takes a compactness depending on the #parcels shown 
-				   (<code>0</code> when <=3, <code>1</code> when <=6, <code>2</code> in case of long lists). 
-			</td>
-		</tr>
-		<tr>
 			<td><code>hideExpired</code></td>
 			<td>Determines whether parcels with status "Expired" should be shown.<br>
 				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
@@ -172,26 +227,21 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>hideDelivered</code></td>
-			<td>Determines whether parcels with status "Delivered" should be shown.<br>
-				<br><b>Possible values:</b> <code>true</code>, <code>false</code> 
-				<br><b>Default value:</b> <code>false</code>
-				<br><b>Note:</b> <em>Not recommended for use</em>. Sometimes the infoline shows important info where, when and how the delivery was. 
-				You don't want to forget your parcel if it has been delivered at the neighbors ;). 
-			</td>
-		</tr>
-		<tr>
-			<td><code>updateInterval</code></td>
-			<td>Time between requests to the API in milliseconds<br>
-				<br><b>Possible values:</b> <code>int</code>
-				<br><b>Default value:</b> <code>600000</code> =10 minutes.
-				<br><b>Note:</b> Internally the module sets 60000 (1 minute) as an absolute lower bound, whatever the config value is. Don't overload the API!
+			<td><code>parcelIconColor</code></td>
+			<td>Colors of the parcel status icons in the header<br>
+				<br><b>Possible values:</b> <code>[string,...,string]</code>. Array of 8 strings defining the icon colors. 
+				<br><b>Default value:</b> <code>["red","red","green","green","cornflowerblue","cornflowerblue","grey","grey"]</code>. 8 colors.
+				<br><b>Note:</b> The colors are icon colors of the Parcel Status in the same order as the texts in the <code>isSorted</code> option above.
+				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
+				<br><b>Note:</b> If the extra info line (whether visible or not) contains the text "to be collected" the parcel is marked as delivered but should still be collected. 
+				To make that visible the icon color of the delivered icon changes in that case
+				to the color of <code>OutforDelivery</code> status. 
 			</td>
 		</tr>	
 		<tr>
 			<td><code>parcelStatusText</code></td>
 			<td>Text to show for the statuses of the Parcel<br>
-				<br><b>Possible values:</b> <code>[s1,...,s8]</code>. Array of 8 strings defining the names for the statuses in the order mentioned in the
+				<br><b>Possible values:</b> <code>[string,...,string]</code>. Array of exactly 8 strings defining the names for the statuses in the order mentioned in the
 				       <code>isSorted</code> option above. 
 				<br><b>Default value:</b> <code>["Exception",...,"Expired"]</code>. English is default. Choose your own language descriptions.
 				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging", "Onderweg",
@@ -202,20 +252,8 @@ The following properties can be configured:
 			</td>
 		</tr>			
 		<tr>
-			<td><code>parcelIconColor</code></td>
-			<td>Colors of the parcel status icons in the header<br>
-				<br><b>Possible values:</b> <code>[s1,...,s8]</code>. Array of 8 strings defining the icon colors. 
-				<br><b>Default value:</b> <code>["red","red","green","green","cornflowerblue","cornflowerblue","grey","grey"]</code>. 8 colors.
-				<br><b>Note:</b> The colors are icon colors of the Parcel Status in the same order as the texts in the <code>isSorted</code> option above.
-				When you are comfortable with the above mentioned colors you do not need to specify this item in the module-config. 
-				<br><b>Note:</b> If the extra info line (whether visible or not) contains the text "to be collected" the parcel is marked as delivered but should still be collected. 
-				To make that visible the icon color of the delivered icon changes in that case
-				to the color of <code>OutforDelivery</code> status. 
-			</td>
-		</tr>	
-		<tr>
 			<td><code>onlyDaysFormat</code></td>
-			<td>Format for delivery time when no hour is yet known for the Parcel. In moment.js calendar format<br>
+			<td>Format for delivery time when only date, and no hour is yet known for the Parcel. In moment.js calendar format<br>
 				<br><b>Possible values:</b> <code>moment.js calendar locale specification</code>
 				<br><b>Default value:</b> 
 				<br><code>{lastDay : '[Yesterday]',</code>
@@ -257,7 +295,7 @@ The following properties can be configured:
 </table>
 
 ## Auto Translation
-Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to english, sometimes not.
+Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to English, sometimes not.
 the MMM-Parcel module contains a translation feature of these information texts based on a free Google Translate API. This only works if <code>autoTranslate</code>
 is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be called if <code>autoTranslate</code> is
 absent or set to <code>false</code>. 
@@ -318,11 +356,12 @@ Example:
 - font-awesome 4.7.0 (already available)
 
 ## Newest features
+- narrow layout added
+- hideDelivered can take an integer. 
 - possibility to translate the info texts. 
-- compactness option of -1 added for auto-adjusting display depending on number of parcels shown. 
-- autoHide implemented
 
 ## Latest Releases
+- version 1.3.0. Added Narrow layout, hideDelivered in days + editorials on Readme. Removed bug of showing "undefined" when the parcellist is empty. 
 - version 1.2.2. Bug fixed, code linting, now displays time of latest checkpoint when no expected delivery is (yet) known. 
                  Message line before clock line.
 - version 1.2.1. Removed spurious debug info to log files

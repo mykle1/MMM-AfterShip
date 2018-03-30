@@ -59,13 +59,13 @@ module.exports = NodeHelper.create({
 			console.log(Date(), "Too many translation API call errors, translations will be stopped (soon) ", 100 - translationErrcount);
 		}
 		
-		if (data.trackings.length == undefined) {return;}
+		if (!data.trackings.length) {return;}
 		var mstrings = [];
 		var mplaces = [];
 		for (var i = 0; i < data.trackings.length; i++) {
 			var j = data.trackings[i].checkpoints.length;
 
-			if ( j == undefined) {break;}	
+			if (!j) {break;}	
 
 			mstrings.push(data.trackings[i].checkpoints[j-1].message);
 			mplaces.push({p:i,cp: j-1});
@@ -93,9 +93,11 @@ module.exports = NodeHelper.create({
 			if (!err) {
 				if (self.config.autoTranslate) {
 					parcelResult = result.data;
+					if (self.config.debug) { console.log("RESULT.DATA-T = ", JSON.stringify(result.data));}
 					self.translate(parcelResult, self.config.autoTranslate);
 				} else {
 					parcelResult = result.data;
+					if (self.config.debug) { console.log("RESULT.DATA-NoT = ", JSON.stringify(result.data));}
 				}
 			} else {
 				console.log(Date(), err);
@@ -113,7 +115,7 @@ module.exports = NodeHelper.create({
 		} else if (notification === 'AFTERSHIP_FETCHER') {
 			this.startUpdateNext();
 		} else if (notification === 'INTERVAL_SET') {
-			updateInterval = (payload<30000)?30000:payload;
+			updateInterval = (payload<60000)?60000:payload;
 		} else {
 			console.log("OOPS. ", notification, payload);
 		}
@@ -122,7 +124,7 @@ module.exports = NodeHelper.create({
 	startUpdateNext: function() {
 		var self = this;
 		this.fetchShipments();
-		setTimeout(function(){ self.UpdateNext();}, 3000 ); // give the API some time to return
+		setTimeout(function(){ self.UpdateNext();}, 3500 ); // give the API some time to return before updating
 	},
 		
 	UpdateNext: function(){
