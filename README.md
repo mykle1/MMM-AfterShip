@@ -1,15 +1,13 @@
 ## MMM-Parcel
 
-Track deliveries . Supports 428 couriers worldwide based on aftership.com
+Track deliveries . Supports >700 couriers worldwide based on tracktry.com API
 
 ## Here's what you get
 
 View parcel tracking status, for display on Magic Mirror.
-Inspired by MMM-AfterShip by Mykle1.
+Originally inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
-
-Example with expected deliveries on a separate line. Expected delivery line is only shown when an ETA is known. 
 
 ![](pictures/1.png)
 
@@ -27,15 +25,15 @@ And in the very compact view (one-liner per shipment):
 
 * Go into the MMM-Parcel directory and do `npm install`
 
-* Get an account on aftership.com (Free account is OK if you track less than 100 parcels per month)
+* Get an account on tracktry.com (Free account is OK if you track less than 100 parcels per month)
 
-* Get your FREE API Key from https://www.aftership.com/ via settings -> API. 
+* Get your API Key from https://my.tracktry.com/ via settings -> API key (at bottom of webpage). 
 
-* You MUST add couriers to your account at aftership.com. 
+* You MUST add courier codes to your account at aftership.com. 
 
-* Add your own trackings
+* Add your own trackings (number and courier code necessary, courier codes can be found at tracktry.com website)
 
-* Tell me what you like, or any issues you have. It is difficult to test as I cannot control or test all variations from AfterShip. 
+* Tell me what you like, or any issues you have.
 
 ## Updates
 Do a `git pull` in the MMM-Parcel module directory. Running a `npm install` again in the same directory is recommended and does no harm. 
@@ -51,7 +49,7 @@ module: 'MMM-Parcel',
 position: 'top_right',	// This can be any of the regions. Best results in left or right regions.
 header: 'My Parcels',   // This is optional
 config: {
-	apiKey: 'Your API KEY goes here', // Your free API Key from aftership.com
+	apiKey: 'Your API KEY goes here', // Your API Key from tracktry.com
 	maxNumber: 10, //maximum number of Parcels to show
 	showCourier: true,
 	autoHide: false, // hide module on mirror when there are no deliveries to be shown
@@ -59,9 +57,10 @@ config: {
 	compactness: -1, // 0 = elaborate, 1 = compact display, 2 = very compact, one-liner per shipment, -1 = automatic
 	hideExpired: true, // don't show expired parcels
 	hideDelivered: 15, // Hide delivered parcels after 15 days. 
-	updateInterval: 600000, // 10 minutes = 10 * 60 * 1000 milliseconds. 
-	parcelStatusText: ["Exception", "Failed Attempt","In Delivery", "In Transit", 
-	                   "Info Received", "Pending", "Delivered", "Expired"], // This is the default. Enter your own language text
+	updateInterval: 30 * 60 * 1000, // 30 minutes = 30 * 60 * 1000 milliseconds.
+                                    // The API refreshes info from couriers every three hours, so don't go too low
+	parcelStatusText: ["Exception", "Failed Attempt", "In Delivery", "In Transit", 
+	                    "Info Received", "Not Found", "Delivered", "Expired"], // This is the default. Enter your own language text
 	parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"], // This is the default. Change for other icon colors
 	onlyDaysFormat: {
 	  lastDay : '[Yesterday]',
@@ -70,9 +69,10 @@ config: {
 	  lastWeek : '[Last] dddd',
 	  nextWeek : 'dddd',
 	  sameElse : 'L'
-	  }, // formatting when only days are shown and time is unknown. 
-	expectedDeliveryText: 'Delivery Expected: ',	 // This is the default. Changes time infoline. 
-    noParcelText: 'No Shipment Data'	 // This is the default. Changes infoline in case of no trackings. 
+	  }, // formatting when only days are shown and time is unknown, change to your preferred language. 
+    expectedDeliveryText: 'Delivery Expected',  // Obsolete in tracktry Interface.
+    lastUpdateText: 'last Updated: ',     // This is the default, change to your preferred language. 
+    noParcelText: 'No Shipment Data'	  // This is the default, change to your preferred language. 
 	}
 },
 ````
@@ -86,7 +86,7 @@ module: 'MMM-Parcel',
 position: 'top_right',	// This can be any of the regions. Best results in left or right regions.
 header: 'My Parcels',   // This is optional
 config: {
-	apiKey: 'Your API KEY goes here' // Your free API Key from aftership.com
+	apiKey: 'Your API KEY goes here' // Your API Key from tracktry.com
 	}
 },
 ````
@@ -106,7 +106,7 @@ The following properties can be configured:
 	<tbody>
 		<tr>
 			<td><code>apiKey</code></td>
-			<td>REQUIRED: Your AfterShip API access token, you can get it via <a href="https://aftership.com">aftership.com</a>. This is the only required config field<br>
+			<td>REQUIRED: Your Tracktry API access token, you can get it via <a href="https://tracktry.com">tracktry.com</a>. This is the only required config field<br>
 				<br><b>Possible values:</b> <code>string</code>
 				<br><b>Default value:</b> <code>none</code>
 			</td>
@@ -142,8 +142,8 @@ The following properties can be configured:
 			<td><code>updateInterval</code></td>
 			<td>Time between requests to the API in milliseconds<br>
 				<br><b>Possible values:</b> <code>int</code>
-				<br><b>Default value:</b> <code>600000</code> =10 minutes.
-				<br><b>Note:</b> Internally the module sets 60000 (1 minute) as an absolute lower bound, whatever the config value is. Don't overload the API!
+				<br><b>Default value:</b> <code>1800000</code> =30 minutes.
+				<br><b>Note:</b> Internally the module sets 90000 (1.5 minute) as an absolute lower bound, whatever the config value is. Don't overload the API! The values are update by tracktry every 2 to 3 hours. 
 			</td>
 		</tr>
 				<tr>
@@ -244,10 +244,10 @@ The following properties can be configured:
 				<br><b>Possible values:</b> <code>[string,...,string]</code>. Array of exactly 8 strings defining the names for the statuses in the order mentioned in the
 				       <code>isSorted</code> option above. 
 				<br><b>Default value:</b> <code>["Exception",...,"Expired"]</code>. English is default. Choose your own language descriptions.
-				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging", "Onderweg",
-                				"Ingevoerd", "Wachtend", "Afgeleverd", "Te oud"],</code> for Dutch Status texts. If you trust the colored status icons to guide you, 
-								you can leave all 
-								(or some) of these texts empty by defining empty strings (<code>""</code>). Just take care to specify an array of total 8 strings! 
+				<br><b>Example:</b> <code> parcelStatusText: ["Fout", "Mislukte bezorging","In bezorging","Onderweg", 
+                				"Ingevoerd", "Niet Gevonden", "Afgeleverd", "Te oud"],</code> for Dutch Status texts. 
+                                If you trust the colored status icons to guide you,you can leave all
+								(or some) of these texts empty by defining empty strings (<code>""</code>). Just take care to specify an array of total exactly 8 strings! 
 								Default are English texts, if you are happy with the English descriptions you may leave this item out of your module-config.  
 			</td>
 		</tr>			
@@ -269,10 +269,9 @@ The following properties can be configured:
 		<tr>
 			<td><code>expectedDeliveryText</code></td>
 			<td>Text to show before showing the expected delivery date<br>
-				<br><b>Possible values:</b> <code>string</code>
-				<br><b>Default value:</b> <code>"Delivery expected: "</code>
-				<br><b>Example:</b> Use "Bezorging verwacht:" in Dutch for example. Only relevant when <code>compactness: 0</code>. 
-				 This option does nothing otherwise. 
+				<br><b>Possible values:</b> None
+				<br><b>Default value:</b> None
+				<br><b>Example:</b> Option obsolete for the new tracktry API.  
 			</td>
 		</tr>
 		<tr>
@@ -280,25 +279,39 @@ The following properties can be configured:
 			<td>Text to show when there are no trackings to show<br>
 				<br><b>Possible values:</b> <code>string</code>
 				<br><b>Default value:</b> <code>"No Shipment Data"</code>
-				<br><b>Example:</b> Use "Geen Data" in Dutch for example.
+				<br><b>Example:</b> Use "Geen pakketten weer te geven" in Dutch for example.
 			</td>
 		</tr>
 		<tr> 
 		    <td><code>autoTranslate</code></td>
-			<td>Translate text shown on the infoline into your own language of choice via Google Translate free API<br>
+			<td>Translate text shown on the infoline into your own language of choice via Google Translate API<br>
 				<br><b>Possible values:</b> <code>language string</code>. 
 				<br><b>Default value:</b> <code>false</code>
-				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code> or if the option is absent. 
+				<br><b>Example:</b> See description below for use. The Google API is not called/used if <code>false</code> or if the option is absent. See below for setting the autoTranslate feature. 
 			</td>
 		</tr>
 	</tbody>
 </table>
 
+## Managing the parcels
+
+You can manage the parcels to be tracked on the mirror by managing the parcellist in https://my.tracktry.com/shipments. 
+
+Here you can enter new parcels to be tracked and delete selected parcels from the list again if no longer relevant. Tracking number and courier code are mandatory. In this webarea you will also find your monthly usage and your API key. 
+
 ## Auto Translation
-Many couriers enter checkpoint message in the language of the country of origin, sometimes aftership decides to translate to English, sometimes not.
-the MMM-Parcel module contains a translation feature of these information texts based on a free Google Translate API. This only works if <code>autoTranslate</code>
-is set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be called if <code>autoTranslate</code> is
-absent or set to <code>false</code>. 
+Many couriers enter checkpoint message in the language of the country of origin. The MMM-Parcel module contains a translation feature of these information texts based on the Google Translate API, with a free 500.000 characters per month. 
+
+To get the Google Translate API to work you need to set up quite a structure in google cloud platform (GCP). Just leave it to English if you don't want to go down this road. 
+Basically the steps are as follows ( Additional help documents with detailed explanations are available at GCP). 
+* Make a GCP account, and activate billing
+* create a project (e.g. MagicMirror) and enable the translate API on this project
+* create a service account and generate and download the json service account key-file.
+* copy the key file to parceltranslate-credentials.json in the MMM-Parcel directory. 
+
+The code is careful with calling this API. Already translated sentences are stored in memory for retrieval, so the translate API is used for new translations only, or after a reboot. With 100 Parcels / month it will be practically impossible to surpass the maximum free Google Translate tier of 500.000 characters. With heavy usage I am on 750 characters / day on average, mostly lower. 
+
+<code>autoTranslate</code> should be set to a valid language string (see https://cloud.google.com/translate/docs/languages).  Translation services will not be called if <code>autoTranslate</code> is absent or set to <code>false</code>. 
  
 An example of a non-translated view on the mirror: 
  
@@ -328,8 +341,8 @@ config: {
 		 lastWeek : '[afgelopen] dddd',
 		 nextWeek : 'dddd',
 		 sameElse : 'L'},
-	expectedDeliveryText: 'Bezorging verwacht: ',
-	noParcelText: 'Geen Data'
+    lastUpdateText: 'Bijgewerkt: ',
+    noParcelText: 'Geen Pakketten weer te geven'
 	}
 },
 ````
@@ -338,9 +351,9 @@ And Yo, see the Dutch mirror:
 
 ![](pictures/6.png)
 
-<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in de MMM-Parcel module directory called <code>force_trans.json</code>
-Don't worry, the file, if it exists, is ignored by `git pull` so will not be overwritten by an update. The file is a JSON formatted text file 
-(don't make any JSON syntax errors!) of translation pairs of original texts (in full) and translated texts. The translation translates complete message entries not word by word. 
+
+<em>Advanced users:</em> When you don't like certain automated translations you can put a forced translation JSON file in a MMM-Parcel module subdirectory  <code>manualtrans/xx.json</code>, where "xx" is the selected language ("manualtrans/nl.json" for Dutch). 
+Don't worry, all files in the `manualtrans/` directory are ignored by `git pull` so will not be overwritten by a normal update of the module; except in the case of a clean re-install, of course. The file is a JSON formatted text file (don't make any JSON syntax errors!) of translation pairs of original texts (full sentences) and translated texts. The translation translates complete message entries not word by word. 
 Example:
 ````
 {
@@ -348,19 +361,49 @@ Example:
 "Processed Through Facility": "Verwerkt in sorteercentrum"
 }
 ````
+## Usage with Post NL (postnl-3s)
+For Dutch users, the web interface at tracktry.com does not allow for entering the receiver postal code, necessary to get a valid response other than "pending" from postnl-3s.  
+
+To work around this problem the MMM-Parcel package also installs a very basic extra webinterface to tracktry.com. This MMM-Parcel web interface comes *with* a possibility to enter the receiver postal code necessary for your postnl-3s packages. Note that once entered they are counted towards your tracktry.com tier. Also you will be able to see, manage and delete the items on the my.tracktry.com => Shipments page.
+
+To start this local MMM-Parcel webinterface you will need to go to the <code>MMM-Parcel/webinterface</code> directory. You have to enter your own tracktry API key in the `src/apikey.js` code and subsequently start the website with <code>npm start parcelweb &</code> in that directory. Or preferrably use the <code>pm2</code> feature for that, so it will start automatically at boot time or when it crashes for whatever reason. For this to work goto `webinterface/src` directory. Enter `pm2 start parcelweb.js`. It will now prompt you as a reminder to execute `pm2 save`. All set now. You can check with `pm2 list` if everything went well.  
+
+You can then use the interface by pointing a browser to http://xxx.yyy.zzz.aaa:3000 where xxx.yyy.zzz.aaa is the local IP adress of the raspberry pi serving the mirror. You can now manage entering the postnl-3s parcels via this web interface. My advice is not to expose this interface to the outside world, for security reasons. 
+
+## Give your Tracking a title
+The tracktry.com website does not allow you to enter a title for the parcels. 
+
+If this is needed/wanted badly you can also install and use the MMM-Parcel webinterface mentioned above. 
+
+Note: the interface does not (yet) allow to modify or enter the title for an already entered item, only new ones can be entered. I found out that you can in that case delete the item and re-enter it from the MMM-Parcel webinterface without it being upcounted against your monthly quota.  
 
 ## Dependencies
-- [aftership] (installed via `npm install`)
-- [google-translate-api] (installed via `npm install`)
-- [moment] (already available)
-- font-awesome 4.7.0 (already available)
+* MMM-Parcel
+- [@google-cloud/translate] (installed via `npm install`)
+
+* MMM-Parcel Web interface
+- all installed via `npm install`
+````
+    "cookie-parser": "^1.4.4",
+    "csurf": "^1.10.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-layout": "^0.1.0",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.3.1",
+    "helmet": "^3.21.2",
+    "multer": "^1.4.2",
+    "request": "^2.88.2",
+    "serve-favicon": "^2.5.0"
+```` 
 
 ## Newest features
-- narrow layout added
-- hideDelivered can take an integer. 
-- possibility to translate the info texts. 
+- use Tracktry.com, aftership now only offers API's from $199,- / month and higher.
+- Web interface to enter parcels with couriers that need extra (mandatory) field for tracking. 
 
 ## Latest Releases
+- version 2.0.0  Tracktry & webinterface. 
 - version 1.3.0. Added Narrow layout, hideDelivered in days + editorials on Readme. Removed bug of showing "undefined" when the parcellist is empty. 
 - version 1.2.2. Bug fixed, code linting, now displays time of latest checkpoint when no expected delivery is (yet) known. 
                  Message line before clock line.
@@ -368,7 +411,7 @@ Example:
 - version 1.2.0. Functional release (adding translations, autohide and automatic compactness)
 
 ## Known issues
-- Aftership does a good job in collecting  information from the courier but is not perfect. Use the mirror presentation as a hint.
+- Tracktry does a reasonably good job in collecting  information from the couriers (at a rate of once every 2 to 3 hours) but is not perfect. Use the mirror presentation as a hint. Often the websites of the couriers give more detailed information that are not accessible via this API.  
 - On full mirrors with many modules the google API translations (if set) sometimes arrive just after the visual update during start-up. 
 No problem, in the next update cycle the translations are picked up. And a mirror is only booted up once a month or less no?
 

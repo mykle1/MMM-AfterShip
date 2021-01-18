@@ -1,0 +1,52 @@
+<!-- views/parcel.ejs -->
+<div class="form-header">
+  <% if (Object.keys(errors).length === 0) { %>
+    <h2>Enter a new parcel</h2>
+  <% } else { %>
+    <h2 class="errors-heading">Oops, please correct the following:</h2>
+    <ul class="errors-list">
+      <% Object.values(errors).forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+
+<form method="post" action="/parcel" novalidate>
+  <div class="form-field <%= errors.trackingcode ? 'form-field-invalid' : '' %>">
+    <label for="trackingcode">Tracking Code</label>
+    <input class="input" id="trackingcode" name="trackingcode" type="text" maxlength="30" autofocus><%= data.trackingcode %></textarea>
+    <% if (errors.trackingcode) { %>
+      <div class="error"><%= errors.trackingcode.msg %></div>
+    <% } %>
+  </div>
+  
+    <div class="form-field <%= errors.handler ? 'form-field-invalid' : '' %>">
+    <label for="handler">Courier Handle</label>
+    <input class="input" id="handler" name="handler" type="text" maxlength="30"><%= data.handler %></textarea>
+    <% if (errors.handler) { %>
+      <div class="error"><%= errors.handler.msg %></div>
+    <% } %>
+  </div>
+  
+  <div class="form-field <%= errors.postalcode ? 'form-field-invalid' : '' %>">
+    <label for="postalcode">Postal Code Receiver (only needed for postnl-3s)</label>
+    <input class="input" id="postalcode" name="postalcode" type="text" maxlength="30"><%= data.postalcode %></textarea>
+    <% if (errors.postalcode) { %>
+      <div class="error"><%= errors.postalcode.msg %></div>
+    <% } %>
+  </div>
+ 
+   <div class="form-field <%= errors.title ? 'form-field-invalid' : '' %>">
+    <label for="title">Descriptive Title (optional) </label>
+    <input class="input" id="title" name="title" type="text" maxlength="30"><%= data.title %></textarea>
+    <% if (errors.title) { %>
+      <div class="error"><%= errors.title.msg %></div>
+    <% } %>
+  </div>
+ 
+  <div class="form-actions">
+    <button class="btn" type="submit">Submit to OrderTracking</button>
+  </div>
+</form>

@@ -1,0 +1,26 @@
+{
+  "name": "parcel-forms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/parcelweb.js",
+  "scripts": {
+    "start": "node src/parcelweb.js"
+  },
+  "keywords": [],
+  "author": "Martin Kooij",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "csurf": "^1.10.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-layout": "^0.1.0",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.3.1",
+    "helmet": "^3.21.2",
+    "multer": "^1.4.2",
+    "request": "^2.88.2",
+    "serve-favicon": "^2.5.0"
+  }
+}

@@ -6,7 +6,7 @@
  */
 Module.register("MMM-Parcel", {
 	
-	aftershipResults: {trackings: []},
+	tracktryResults: {items: []},
 
 	// Module config defaults.		   
 	// Make all changes in your config.js file
@@ -22,8 +22,10 @@ Module.register("MMM-Parcel", {
 		isSorted: true,
 		compactness: -1, // 0 = elaborate, 1 = compact, 2 = very compact, -1 = automatic
 		hideExpired: true,
+		autoTranslate: null,
+		useGoogleTranslate: false,
 		updateInterval: 600000, // 10 minutes
-		parcelStatusText: ["Exception", "Failed Attempt", "In Delivery", "In Transit", "Info Received", "Pending", "Delivered", "Expired"],
+		parcelStatusText: ["Exception", "Failed Attempt", "In Delivery", "In Transit", "Info Received", "Not Found", "Delivered", "Expired"],
 		parcelIconColor: ["red", "red", "green", "green", "cornflowerblue", "cornflowerblue", "grey", "grey"],
 		onlyDaysFormat: 
 			{lastDay : '[Yesterday]',
@@ -32,31 +34,33 @@ Module.register("MMM-Parcel", {
 			 lastWeek : '[Last] dddd',
 			 nextWeek : 'dddd',
 			 sameElse : 'L'},
-		expectedDeliveryText: 'Delivery expected: ',
+		expectedDeliveryText: 'Expected delivery: ', // Not in use with tracktry
+		lastUpdateText: 'Last Update: ', // New with tracktry
 		noParcelText : 'No Shipment Data',
 		debug: false
 	},
 
 	getStyles: function () {
-		return ["font-awesome.css", "MMM-Parcel.css"];
+		return ["MMM-Parcel.css"];
 	},
 	getScripts: function () {
 		return ["moment.js"];
 	},
+	
 
 	start: function() {
-		Log.info("Starting module: " + this.name);
-		this.aftershipResults = {trackings:[]}; 
+		Log.info("Starting My Magic Module: " + this.name);
+		this.tracktryResults = {items:[]}; 
 		this.loaded = false;
 		this.sendSocketNotification('CONFIG', this.config);
 		this.sendSocketNotification("INTERVAL_SET", this.config.updateInterval);
-		this.sendSocketNotification('AFTERSHIP_FETCHER');	 
+		this.sendSocketNotification('TRACKTRY_FETCHER');	 
 	},
 	
 	heyIamHere: null,
 	
 	suspend : function() {
-		this.sendSocketNotification("INTERVAL_SET", Math.max(900000,this.config.updateInterval*2));
+		this.sendSocketNotification("INTERVAL_SET", Math.max(60 * 60 * 1000,this.config.updateInterval*2));
 	},
 	
 	resume: function() {
@@ -67,9 +71,9 @@ Module.register("MMM-Parcel", {
 		var wrapper = document.createElement("table");
 		wrapper.className = "small";
 		wrapper.style.maxWidth = this.config.maxWidth;
-		const parcelStatus = [ "Exception", "AttemptFail", "OutForDelivery", "InTransit", "InfoReceived", "Pending", "Delivered", "Expired"];
-		const parcelIcons = [ "fa fa-exclamation-triangle fa-fw", "fa fa-bolt fa-fw", "fa fa-truck fa-fw", "fa fa-exchange fa-fw",
-							  "fa fa-file-text-o fa-fw", "fa fa-clock-o fa-fw", "fa fa-check-square-o fa-fw", "fa fa-history fa-fw"];
+		const parcelStatus = [ "exception", "undelivered", "pickup", "transit", "pending", "notfound", "delivered", "expired"];
+		const parcelIcons = [ "fas fa-exclamation-triangle fa-fw", "fas fa-bolt fa-fw", "fas fa-truck fa-fw", "fas fa-exchange-alt fa-fw",
+							  "far fa-file-alt fa-fw", "fas fa-question fa-fw", "far fa-check-square fa-fw", "fas fa-history fa-fw"];
 		const parcelStatustext = this.config.parcelStatusText;
 		const parcelIconColor = this.config.parcelIconColor;
 
@@ -98,7 +102,7 @@ Module.register("MMM-Parcel", {
 			return wrapper;
 		}
 		
-		var parcelList = this.aftershipResults.trackings;
+		var parcelList = this.tracktryResults.items;
 		if (this.config.debug) {this.sendSocketNotification("PARCELLISTLENGTH:", parcelList.length);}
 
 		//remove expired/delivered deliveries if hideExpired / hideDelivered is true;
@@ -106,11 +110,11 @@ Module.register("MMM-Parcel", {
 		for (var i = 0; i < parcelList.length; i++) {
 			if 	(
 				!( 
-				((this.config.hideDelivered === true) && parcelList[i].tag == "Delivered") ||
-				(parcelList[i].tag == "Delivered" && Number.isInteger(this.config.hideDelivered) &&  moment().diff(parcelList[i].updated_at,'days') >= this.config.hideDelivered)
+				((this.config.hideDelivered === true) && parcelList[i].status == "delivered") ||
+				(parcelList[i].status == "delivered" && Number.isInteger(this.config.hideDelivered) &&  moment().diff(parcelList[i].updated_at,'days') >= this.config.hideDelivered)
 				)&& 
 				!
-				(this.config.hideExpired && parcelList[i].tag == "Expired")
+				(this.config.hideExpired && parcelList[i].status == "expired")
 				) {
 				l.push(parcelList[i]);
 			}
@@ -150,7 +154,7 @@ Module.register("MMM-Parcel", {
 		isNarrow = !(this.config.forceWide) && isNarrow ;
 		
 		if (this.config.isSorted) {
-			l = l.sort(function(a,b){return parcelStatus.indexOf(a.tag) - parcelStatus.indexOf(b.tag);});
+			l = l.sort(function(a,b){return parcelStatus.indexOf(a.status) - parcelStatus.indexOf(b.status);});
 		}
 		
 		// If there are deliveries left, go through all the data
@@ -164,17 +168,21 @@ Module.register("MMM-Parcel", {
 			parcelWrapperheaderline.className = "ParcelHeader";
 			var extraClockline = document.createElement("tr");
 			extraClockline.className = "ParcelInfo";
-			var parcelName = p.title || p.tracking_number;
-			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.tag)], parcelIconColor[parcelStatus.indexOf(p.tag)]);
-			var lastLoc = ( (p.checkpoints) && p.checkpoints.length != 0 )?p.checkpoints[p.checkpoints.length-1]:null;
+			var parcelName = (p.title)? ( (p.title != "")?p.title:p.tracking_number ) : p.tracking_number ;
+			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.status)], parcelIconColor[parcelStatus.indexOf(p.status)]);
+			var lastLoc = null;
+			if (p.destination_info.trackinfo) {
+				lastLoc = p.destination_info.trackinfo[0];
+			} else if (p.origin_info.trackinfo) {
+				lastLoc = p.origin_info.trackinfo[0];} ;
 			var headerSlug = "";
 			var timeSlug = "";
-			var headerStatus = parcelStatustext[parcelStatus.indexOf(p.tag)];
+			var headerStatus = parcelStatustext[parcelStatus.indexOf(p.status)];
 			
 			if (isNarrow && !isveryCompact && this.config.showCourier) {
-				timeSlug = p.slug ;
+				timeSlug = p.carrier_code ;
 			} else if (this.config.showCourier) {
-				headerSlug = p.slug ;
+				headerSlug = p.carrier_code ;
 			}
 				
 				// icon 
@@ -205,10 +213,12 @@ Module.register("MMM-Parcel", {
 				headerwrapper.colSpan = (timeFormat === 2)?"3":"2";
 				parcelWrapperheaderline.appendChild(headerwrapper);
 				
-				var clockTime = p.expected_delivery;
-				if ( !(clockTime) && lastLoc && (lastLoc.checkpoint_time) ){
-					clockTime = lastLoc.checkpoint_time;
-				}	
+				var clockTime = null;
+				if ( lastLoc && (lastLoc.Date) ){
+					clockTime = lastLoc.Date;
+				} else {
+					clockTime = p.updated_at ;
+				}
 				
 				var deliverywrapper = document.createElement("td");
 				deliverywrapper.innerHTML = "";
@@ -220,10 +230,10 @@ Module.register("MMM-Parcel", {
 					var thisweek = delivery >= (startofDay + 24 * 60 * 60 * 1000) && delivery < (startofDay + 7 * 24 * 60 * 60 * 1000);
 					if (timeFormat === 2) {
 						if (clockTime.includes("T")) {
-							deliverywrapper.innerHTML = (p.expected_delivery?this.config.expectedDeliveryText:"") + 
+							deliverywrapper.innerHTML = this.config.lastUpdateText + 
 							moment(clockTime).calendar();
 						} else {
-							deliverywrapper.innerHTML = (p.expected_delivery?this.config.expectedDeliveryText:"") + 
+							deliverywrapper.innerHTML = this.config.lastUpdateText + 
 							moment(clockTime).calendar(null,this.config.onlyDaysFormat);
 						}
 					} else if (timeFormat === 1) {
@@ -281,10 +291,9 @@ Module.register("MMM-Parcel", {
 			
 
 			// infoline (if relevant)
-			if (((p.checkpoints) != undefined) && p.checkpoints.length != 0) { 
+			if (lastLoc) { 
 				var parcelWrapperinfoline = document.createElement("tr");
 				parcelWrapperinfoline.className = "ParcelInfo"; 
-				lastLoc = p.checkpoints[p.checkpoints.length-1];
 				// empty icon for indent
 				parcelWrapperinfoline.appendChild(this.makeParcelIconWrapper("fa-fw"));
 				// location icon 
@@ -294,9 +303,14 @@ Module.register("MMM-Parcel", {
 				infotextwrapper.colSpan = "2";
 
 				var extraInfoText = "";
-				var message = (lastLoc.translated_message)?lastLoc.translated_message:lastLoc.message;
+				var message = (p.translated_message)?p.translated_message: lastLoc.StatusDescription;
 				var sepNeed = false;
-				if (lastLoc.city != null) {
+				
+				if (lastLoc.Details && lastLoc.Details.trim().length != 0) {
+					extraInfoText += ((p.translated_details)?p.translated_details: lastLoc.Details);
+					sepNeed = true;
+				}
+/*				if (lastLoc.city != null) {
 					extraInfoText += lastLoc.city;
 					sepNeed = true;
 				}
@@ -310,16 +324,17 @@ Module.register("MMM-Parcel", {
 					extraInfoText += lastLoc.country_name;
 					sepNeed = true;
 				}
+*/ 
 				if (message != null) {
-					if (sepNeed) { extraInfoText += ": "; }
-					extraInfoText += message;
+					extraInfoText = message + (sepNeed?", ":"") + extraInfoText;
 					sepNeed = true;
 				}
 
+
 				infotextwrapper.innerHTML = extraInfoText;
 				//change delivered icon color to "OutforDelivery" color if still to be collected
-				if ( lastLoc && lastLoc.message && lastLoc.message.indexOf("to be collected") != -1 && p.tag === "Delivered" ) {
-					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("OutForDelivery")];
+				if ( lastLoc && lastLoc.StatusDescription && lastLoc.StatusDescription.indexOf("collected") != -1 && p.status === "Delivered" ) {
+					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("pickup")];
 				}
 				parcelWrapperinfoline.appendChild(infotextwrapper);
 				// add infoline unless very compact style
@@ -335,10 +350,12 @@ Module.register("MMM-Parcel", {
 		
 	}, // <-- closes getDom
 	
+
+
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === 'AFTERSHIP_RESULT') {
+		if (notification === 'TRACKTRY_RESULT') {
 			this.loaded = true;
-			this.aftershipResults = payload;
+			this.tracktryResults = payload;
 			this.updateDom(this.config.animationSpeed);
 		} else {
 			this.sendSocketNotification("WEIRD NOTIFICATION RECEIVED:", notification + ", " + payload);

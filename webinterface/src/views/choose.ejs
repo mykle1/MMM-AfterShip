@@ -1,0 +1,10 @@
+<form>
+<% if (messages.success) { %>
+  <div class="flash flash-success"><%= messages.success %></div>
+<% } %>
+<h1> Choose Action:</h1>
+<br>
+<br>
+    <button type="submit" class="btn btn-primary btn-lg" formaction="/parcel" method="get" >Parcel Entry</button>
+    <button type="submit" class="btn btn-primary btn-lg" formaction="/getlist" method="get">Parcel List</button>
+</form>

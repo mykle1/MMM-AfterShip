@@ -1,0 +1,30 @@
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+
+    <h2>List of Parcels:</h2>
+    
+	<table>
+		 <tr>
+		<th>Index</th>
+		<th>Track</th>
+		<th>Carrier</th>
+		<th>Status</th>
+		</tr>
+      <% plpl.forEach( function(parcel) { %>
+
+        <td><%= parcel.index %> </td>
+		<td><%= parcel.tracking_number %> </td>
+		<td><%= parcel.carrier_code %></td>
+		<td><%= parcel.status %></ld>
+		</tr>
+      <% }) %>
+    </table>
+	
+<br><br>
+<form action="/" method="get">
+    <button type="submit" class="btn btn-primary btn-lg" formaction="/" method="get">RETURN</button>
+</form>
+
