@@ -219,6 +219,7 @@ Module.register("MMM-Parcel", {
 				} else {
 					clockTime = p.updated_at ;
 				}
+				if (clockTime && !clockTime.includes("-", 11) && !clockTime.includes("+", 11) ) {clockTime += " +0000"}; //assume GMT if no TimeZone
 				
 				var deliverywrapper = document.createElement("td");
 				deliverywrapper.innerHTML = "";
@@ -229,7 +230,7 @@ Module.register("MMM-Parcel", {
 					var today = delivery >= startofDay &&  delivery < (startofDay + 24 * 60 * 60 * 1000);
 					var thisweek = delivery >= (startofDay + 24 * 60 * 60 * 1000) && delivery < (startofDay + 7 * 24 * 60 * 60 * 1000);
 					if (timeFormat === 2) {
-						if (clockTime.includes("T")) {
+						if (clockTime.includes("T") || clockTime.includes(":")) {
 							deliverywrapper.innerHTML = this.config.lastUpdateText + 
 							moment(clockTime).calendar();
 						} else {
@@ -240,7 +241,7 @@ Module.register("MMM-Parcel", {
 						if (today) {
 							deliverywrapper.innerHTML = moment(clockTime).format('LT');
 						} else if (thisweek) {
-							if (clockTime.includes("T")) {
+							if (clockTime.includes("T") || clockTime.includes(":")) {
 								deliverywrapper.innerHTML = moment(clockTime).format('dd LT');
 							} else {
 								deliverywrapper.innerHTML = moment(clockTime).format('dddd');
@@ -249,7 +250,7 @@ Module.register("MMM-Parcel", {
 							deliverywrapper.innerHTML = moment(clockTime).format('L');
 						}
 					} else { //timeFormat === 0
-						if (today && clockTime.includes("T")) {
+						if (today && (clockTime.includes("T") || clockTime.includes(":"))) {
 							deliverywrapper.innerHTML = moment(clockTime).format((config.timeFormat==24)?"HH:mm":"ha");
 						} else if (thisweek) {
 							deliverywrapper.innerHTML = moment(clockTime).format('dd');
