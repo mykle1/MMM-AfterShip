@@ -67,11 +67,35 @@ Module.register("MMM-Parcel", {
 		this.sendSocketNotification("INTERVAL_SET", this.config.updateInterval);
 	},
 
+	mapParcelStatus: function(status) {
+		const parcelStatus = [
+			"exception",
+			"undelivered",
+			"pickup",
+			"transit",
+			["pending", "InfoReceived"],
+			"notfound",
+			"delivered",
+			"expired"
+		];
+		let isMatch = function(input, search) {
+			if( input ) {
+				if( Array.isArray(input) ) {
+					return input.some(x => isMatch(x, search));
+				}
+				else {
+					return input == search;
+				}
+			}
+			return false;
+		}
+		return parcelStatus.findIndex(x => isMatch(x, status));
+	},
+
 	getDom: function() {
 		var wrapper = document.createElement("table");
 		wrapper.className = "small";
 		wrapper.style.maxWidth = this.config.maxWidth;
-		const parcelStatus = [ "exception", "undelivered", "pickup", "transit", "pending", "notfound", "delivered", "expired"];
 		const parcelIcons = [ "fas fa-exclamation-triangle fa-fw", "fas fa-bolt fa-fw", "fas fa-truck fa-fw", "fas fa-exchange-alt fa-fw",
 							  "far fa-file-alt fa-fw", "fas fa-question fa-fw", "far fa-check-square fa-fw", "fas fa-history fa-fw"];
 		const parcelStatustext = this.config.parcelStatusText;
@@ -154,7 +178,8 @@ Module.register("MMM-Parcel", {
 		isNarrow = !(this.config.forceWide) && isNarrow ;
 		
 		if (this.config.isSorted) {
-			l = l.sort(function(a,b){return parcelStatus.indexOf(a.status) - parcelStatus.indexOf(b.status);});
+			var self = this;
+			l = l.sort(function(a,b){return self.mapParcelStatus(a.status) - self.mapParcelStatus(b.status);});
 		}
 		
 		// If there are deliveries left, go through all the data
@@ -163,13 +188,13 @@ Module.register("MMM-Parcel", {
 		if (this.config.debug) {this.sendSocketNotification("PACKAGE: ", JSON.stringify(p));}
 			if (count++ == this.config.maxNumber) { break; }
 			
-			// headerline 
+			// headerline
 			var parcelWrapperheaderline = document.createElement("tr");
 			parcelWrapperheaderline.className = "ParcelHeader";
 			var extraClockline = document.createElement("tr");
 			extraClockline.className = "ParcelInfo";
 			var parcelName = (p.title)? ( (p.title != "")?p.title:p.tracking_number ) : p.tracking_number ;
-			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[parcelStatus.indexOf(p.status)], parcelIconColor[parcelStatus.indexOf(p.status)]);
+			var thisParcelIcon = this.makeParcelIconWrapper(parcelIcons[this.mapParcelStatus(p.status)], parcelIconColor[this.mapParcelStatus(p.status)]);
 			var lastLoc = null;
 			if (p.destination_info.trackinfo) {
 				lastLoc = p.destination_info.trackinfo[0];
@@ -177,7 +202,7 @@ Module.register("MMM-Parcel", {
 				lastLoc = p.origin_info.trackinfo[0];} ;
 			var headerSlug = "";
 			var timeSlug = "";
-			var headerStatus = parcelStatustext[parcelStatus.indexOf(p.status)];
+			var headerStatus = parcelStatustext[this.mapParcelStatus(p.status)];
 			
 			if (isNarrow && !isveryCompact && this.config.showCourier) {
 				timeSlug = p.carrier_code ;
@@ -335,7 +360,7 @@ Module.register("MMM-Parcel", {
 				infotextwrapper.innerHTML = extraInfoText;
 				//change delivered icon color to "OutforDelivery" color if still to be collected
 				if ( lastLoc && lastLoc.StatusDescription && lastLoc.StatusDescription.indexOf("collected") != -1 && p.status === "Delivered" ) {
-					thisParcelIcon.style.color = parcelIconColor[parcelStatus.indexOf("pickup")];
+					thisParcelIcon.style.color = parcelIconColor[this.mapParcelStatus("pickup")];
 				}
 				parcelWrapperinfoline.appendChild(infotextwrapper);
 				// add infoline unless very compact style
