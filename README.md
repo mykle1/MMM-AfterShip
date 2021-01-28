@@ -5,7 +5,7 @@ Track deliveries . Supports >700 couriers worldwide based on tracktry.com API
 ## Here's what you get
 
 View parcel tracking status, for display on Magic Mirror.
-Originally inspired by MMM-AfterShip by Mykle1.
+Inspired by MMM-AfterShip by Mykle1.
 
 ## Examples
 
@@ -38,7 +38,7 @@ And in the very compact view (one-liner per shipment):
 ## Updates
 Do a `git pull` in the MMM-Parcel module directory. Running a `npm install` again in the same directory is recommended and does no harm. 
 In case supporting features need new packages, such as when you upgrade to a version 
-with the automatic translations feature, the `npm install` is really needed.  
+with the automatic translations feature, the `npm install` is really needed.
 
 ## Using the module
 
@@ -379,10 +379,13 @@ Note: the interface does not (yet) allow to modify or enter the title for an alr
 
 ## Dependencies
 * MMM-Parcel
-- [@google-cloud/translate] (installed via `npm install`)
-
+automatically installed via `npm install`
+````
+    "@google-cloud/translate": "latest",
+    "node-fetch": "latest"
+````
 * MMM-Parcel Web interface
-- all installed via `npm install`
+automatically installed via `npm install`
 ````
     "cookie-parser": "^1.4.4",
     "csurf": "^1.10.0",
@@ -394,15 +397,24 @@ Note: the interface does not (yet) allow to modify or enter the title for an alr
     "express-validator": "^6.3.1",
     "helmet": "^3.21.2",
     "multer": "^1.4.2",
-    "request": "^2.88.2",
+    "node-fetch": "^2.6.1",
     "serve-favicon": "^2.5.0"
 ```` 
 
 ## Newest features
+
+- handles undocumented statuses (like InfoReceived)
 - use Tracktry.com, aftership now only offers API's from $199,- / month and higher.
 - Web interface to enter parcels with couriers that need extra (mandatory) field for tracking. 
 
 ## Latest Releases
+- version 2.1.0
+````
+- Refactor of handling code, replaced deprecated "request" with "node-fetch", cleaned code by using async/await
+- Created a middleware "api normalizer" to prepare for ever changing API's and making display module more robust
+- Depends on nodejs >= V10 ( newer than 2nd quarter of 2018)
+````
+- version 2.0.1  *last version working with nodejs < V10. Deprecated.* 
 - version 2.0.0  Tracktry & webinterface. 
 - version 1.3.0. Added Narrow layout, hideDelivered in days + editorials on Readme. Removed bug of showing "undefined" when the parcellist is empty. 
 - version 1.2.2. Bug fixed, code linting, now displays time of latest checkpoint when no expected delivery is (yet) known. 
@@ -412,6 +424,5 @@ Note: the interface does not (yet) allow to modify or enter the title for an alr
 
 ## Known issues
 - Tracktry does a reasonably good job in collecting  information from the couriers (at a rate of once every 2 to 3 hours) but is not perfect. Use the mirror presentation as a hint. Often the websites of the couriers give more detailed information that are not accessible via this API.  
-- On full mirrors with many modules the google API translations (if set) sometimes arrive just after the visual update during start-up. 
-No problem, in the next update cycle the translations are picked up. And a mirror is only booted up once a month or less no?
+
 

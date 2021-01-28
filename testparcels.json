@@ -8,11 +8,11 @@
     "page": 1,
     "limit": 25,
     "total": "4",
-    "count": 4,
+    "count": 3,
     "items": [
       {
-        "id": "46375d6bdd871dcb1cda6dde890a7633",
-        "tracking_number": "CL72373249327429NL",
+        "id": "xxxxxxxxxxxxxxxxx",
+        "tracking_number": "CL72111111111111111NL",
         "carrier_code": "fastway-au",
         "status": "exception",
         "created_at": "2021-01-12T19:24:16+00:00",
@@ -57,13 +57,13 @@
         "lastEvent": "",
         "lastUpdateTime": ""
       },
-      {
-        "id": "0040a5c9d8bc356be55d7acba4cfef7b",
-        "tracking_number": "CL168253685NL",
-        "carrier_code": "postnl-parcels",
-        "status": "pickup",
-        "created_at": "2021-01-05T11:57:50+00:00",
-        "updated_at": "2021-01-11T04:46:47+00:00",
+	  {
+        "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "tracking_number": "1Z111111111111",
+        "carrier_code": "ups",
+        "status": "delivered",
+        "created_at": "2021-01-16T17:21:43+00:00",
+        "updated_at": "2021-01-19T10:47:58+00:00",
         "order_create_time": null,
         "customer_email": "",
         "title": "",
@@ -72,311 +72,151 @@
         "customer_name": null,
         "archived": false,
         "original_country": "",
-        "itemTimeLength": 39,
-        "stayTimeLength": 19,
+        "itemTimeLength": 4,
+        "stayTimeLength": 1,
         "service_code": null,
         "status_info": null,
         "origin_info": {
           "ReferenceNumber": null,
-          "ItemReceived": "2020-12-03 18:56",
+          "ItemReceived": "2021-01-15 13:28",
           "ItemDispatched": null,
           "DepartfromAirport": null,
-          "ArrivalfromAbroad": "2020-12-12 00:25",
+          "ArrivalfromAbroad": null,
           "CustomsClearance": null,
-          "DestinationArrived": null,
-          "weblink": "http://www.postnl.post/",
+          "DestinationArrived": "2021-01-19 03:32",
+          "weblink": "https://www.ups.com/us/en/Home.page",
           "phone": null,
-          "carrier_code": "postnl-parcels",
+          "carrier_code": "ups",
           "trackinfo": [
             {
-              "Date": "2020-12-23 10:17",
-              "StatusDescription": "The item has been processed in the country of destination",
-              "Details": "",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
+              "ActType": "D",
+              "Date": "2021-01-19 10:33",
+              "StatusDescription": "DELIVERED",
+              "Details": "LEIDEN,23xx,NL",
+              "checkpoint_status": "delivered",
+              "substatus": "delivered001"
             },
             {
-              "Date": "2020-12-12 00:25",
-              "StatusDescription": "The item has arrived in the country of destination",
-              "Details": "",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
+              "ActType": "I",
+              "Date": "2021-01-19 03:32",
+              "StatusDescription": "Out For Delivery",
+              "Details": "Rotterdam,NL",
+              "checkpoint_status": "pickup",
+              "substatus": "pickup001"
             },
             {
-              "Date": "2020-12-08 20:35",
-              "StatusDescription": "The item is on transport to the country of destination",
-              "Details": "",
+              "ActType": "I",
+              "Date": "2021-01-19 01:09",
+              "StatusDescription": "Arrived at Facility",
+              "Details": "Rotterdam,NL",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-08 13:49",
-              "StatusDescription": "The item is at the PostNL sorting center",
-              "Details": "",
+              "ActType": "I",
+              "Date": "2021-01-18 19:53",
+              "StatusDescription": "Departed from Facility",
+              "Details": "Herne-Boernig,DE",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-08 13:49",
-              "StatusDescription": "The item is processed at the PostNL sorting center",
-              "Details": "",
+              "ActType": "I",
+              "Date": "2021-01-16 10:35",
+              "StatusDescription": "Arrived at Facility",
+              "Details": "Herne-Boernig,DE",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-03 18:56",
-              "StatusDescription": "The item is accepted by PostNL",
-              "Details": "",
+              "ActType": "I",
+              "Date": "2021-01-16 03:47",
+              "StatusDescription": "Departed from Facility",
+              "Details": "Nurnberg,DE",
               "checkpoint_status": "transit",
-              "substatus": "transit001",
+              "substatus": "transit001"
+            },
+            {
+              "ActType": "I",
+              "Date": "2021-01-15 20:01",
+              "StatusDescription": "Arrived at Facility",
+              "Details": "Nurnberg,DE",
+              "checkpoint_status": "transit",
+              "substatus": "transit001"
+            },
+            {
+              "ActType": "I",
+              "Date": "2021-01-15 18:45",
+              "StatusDescription": "Departed from Facility",
+              "Details": "Bamberg,DE",
+              "checkpoint_status": "transit",
+              "substatus": "transit001"
+            },
+            {
+              "ActType": "M",
+              "Date": "2021-01-15 18:30",
+              "StatusDescription": "Shipper created a label, UPS has not received the package yet.",
+              "Details": "DE",
+              "substatus_num": 11,
+              "substatus": "notfound001",
+              "checkpoint_status": "transit"
+            },
+            {
+              "ActType": "I",
+              "Date": "2021-01-15 16:27",
+              "StatusDescription": "Origin Scan",
+              "Details": "Bamberg,DE",
+              "checkpoint_status": "transit",
+              "substatus": "transit001"
+            },
+            {
+              "ActType": "P",
+              "Date": "2021-01-15 13:28",
+              "StatusDescription": "Pickup Scan",
+              "Details": "Bamberg,DE",
+              "checkpoint_status": "pickup",
+              "substatus": "notfound001",
               "ItemNode": "ItemReceived"
             }
           ]
         },
         "destination_info": {
-          "ItemReceived": "2020-12-03 18:55:00",
-          "ItemDispatched": null,
-          "DepartfromAirport": "2020-12-14 16:15:00",
-          "ArrivalfromAbroad": "2020-12-23 10:17:58",
-          "CustomsClearance": "2021-01-05 08:02:45",
-          "DestinationArrived": "2021-01-07 14:50:00",
-          "weblink": null,
-          "phone": null,
-          "carrier_code": null,
-          "trackinfo": [
-            {
-              "Date": "2021-01-11 09:11:58",
-              "StatusDescription": " Receive item at delivery office ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "pickup",
-              "substatus": "pickup001"
-            },
-            {
-              "Date": "2021-01-07 14:50:00",
-              "StatusDescription": "Item out for delivery",
-              "Details": "",
-              "checkpoint_status": "pickup",
-              "substatus": "pickup001"
-            },
-            {
-              "Date": "2021-01-05 10:00:05",
-              "StatusDescription": " Enroute to delivery office ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2021-01-05 08:02:45",
-              "StatusDescription": " Returned from Customs (CUSTOMS STATUS: Import authorized, no taxes or duties to be paid)",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit005"
-            },
-            {
-              "Date": "2020-12-29 14:32:30",
-              "StatusDescription": " Item for Customs examination ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-23 10:17:58",
-              "StatusDescription": " Receive at country of destination ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
-            },
-            {
-              "Date": "2020-12-14 16:15:00",
-              "StatusDescription": " Dispatch to country of destination",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-08 13:48:00",
-              "StatusDescription": "Dispatch item to destination country",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-03 18:55:00",
-              "StatusDescription": " Posting of item",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001",
-              "ItemNode": "ItemReceived"
-            }
-          ]
-        },
-        "lastEvent": "The item has been processed in the country of destination,2020-12-23 10:17",
-        "lastUpdateTime": "2020-12-23 10:17"
-      },
-      {
-        "id": "d8d8738fa2a627123dba80574cf323a4",
-        "tracking_number": "CL168253685NL",
-        "carrier_code": "phlpost",
-        "status": "expired",
-        "created_at": "2021-01-05T11:47:24+00:00",
-        "updated_at": "2021-01-05T11:47:35+00:00",
-        "order_create_time": null,
-        "customer_email": "",
-        "title": "",
-        "order_id": null,
-        "comment": null,
-        "customer_name": null,
-        "archived": false,
-        "original_country": "",
-        "itemTimeLength": 34,
-        "stayTimeLength": 14,
-        "service_code": null,
-        "status_info": null,
-        "origin_info": {
-          "ReferenceNumber": null,
-          "ItemReceived": "2020-12-03 00:00",
+          "ItemReceived": null,
           "ItemDispatched": null,
           "DepartfromAirport": null,
-          "ArrivalfromAbroad": "2020-12-12 00:00",
+          "ArrivalfromAbroad": null,
           "CustomsClearance": null,
-          "DestinationArrived": null,
-          "weblink": "http://www.postnl.post/",
-          "phone": null,
-          "carrier_code": "phlpost",
-          "trackinfo": [
-            {
-              "Date": "2020-12-23 00:00",
-              "StatusDescription": "The item has been processed in the country of destination",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
-            },
-            {
-              "Date": "2020-12-12 00:00",
-              "StatusDescription": "The item has arrived in the country of destination",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
-            },
-            {
-              "Date": "2020-12-08 00:00",
-              "StatusDescription": "The item is on transport to the country of destination",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-08 00:00",
-              "StatusDescription": "The item is at the PostNL sorting center",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-08 00:00",
-              "StatusDescription": "The item is processed at the PostNL sorting center",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-03 00:00",
-              "StatusDescription": "The item is accepted by PostNL",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001",
-              "ItemNode": "ItemReceived"
-            }
-          ]
-        },
-        "destination_info": {
-          "ItemReceived": "2020-12-03 18:55:00",
-          "ItemDispatched": null,
-          "DepartfromAirport": "2020-12-14 16:15:00",
-          "ArrivalfromAbroad": "2020-12-23 10:17:58",
-          "CustomsClearance": "2021-01-05 08:02:45",
           "DestinationArrived": null,
           "weblink": null,
           "phone": null,
           "carrier_code": null,
-          "trackinfo": [
-            {
-              "Date": "2021-01-05 10:00:05",
-              "StatusDescription": " Enroute to delivery office ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2021-01-05 08:02:45",
-              "StatusDescription": " Returned from Customs (CUSTOMS STATUS: Import authorized, no taxes or duties to be paid)",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit005"
-            },
-            {
-              "Date": "2020-12-29 14:32:30",
-              "StatusDescription": " Item for Customs examination ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-23 10:17:58",
-              "StatusDescription": " Receive at country of destination ",
-              "Details": "PHILIPPINES",
-              "checkpoint_status": "transit",
-              "substatus": "transit004"
-            },
-            {
-              "Date": "2020-12-14 16:15:00",
-              "StatusDescription": " Dispatch to country of destination",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-08 13:48:00",
-              "StatusDescription": "Dispatch item to destination country",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-03 18:55:00",
-              "StatusDescription": " Posting of item",
-              "Details": "Netherlands (the)",
-              "checkpoint_status": "transit",
-              "substatus": "transit001",
-              "ItemNode": "ItemReceived"
-            }
-          ]
+          "trackinfo": null
         },
-        "lastEvent": "The item has been processed in the country of destination,PHILIPPINES,2020-12-23 00:00",
-        "lastUpdateTime": "2020-12-23 00:00"
+        "lastEvent": "DELIVERED,LEIDEN,23xx,NL,2021-01-19 10:33",
+        "lastUpdateTime": "2021-01-19 10:33"
       },
-      {
-        "id": "c171b18bf0fe3af295975b339316f970",
-        "tracking_number": "3SMGKO5469911",
+     {
+        "id": "xxxxxxxxxxxxxxxxxxxxxxxxx",
+        "tracking_number": "3SL33333333333",
         "carrier_code": "postnl-3s",
-        "status": "undelivered",
-        "created_at": "2021-01-04T20:02:26+00:00",
-        "updated_at": "2021-01-10T19:51:29+00:00",
+        "status": "delivered",
+        "created_at": "2021-01-24T14:45:35+00:00",
+        "updated_at": "2021-01-27T19:28:49+00:00",
         "order_create_time": null,
         "customer_email": "",
-        "title": "",
+        "title": "Retour Beaumotica",
         "order_id": null,
         "comment": null,
         "customer_name": null,
         "archived": false,
         "original_country": "",
-        "itemTimeLength": 1,
-        "stayTimeLength": 28,
+        "itemTimeLength": 3,
+        "stayTimeLength": 1,
         "service_code": null,
         "status_info": null,
         "origin_info": {
           "ReferenceNumber": null,
-          "ItemReceived": "2020-12-13 19:05",
+          "ItemReceived": "2021-01-24 21:23",
           "ItemDispatched": null,
           "DepartfromAirport": null,
           "ArrivalfromAbroad": null,
@@ -387,42 +227,49 @@
           "carrier_code": "postnl-3s",
           "trackinfo": [
             {
-              "Date": "2020-12-14 14:34",
-              "StatusDescription": "Shipment collected at PostNL retail point",
+              "Date": "2021-01-26 22:35",
+              "StatusDescription": "Shipment delivered",
+              "Details": "NL",
+              "checkpoint_status": "delivered",
+              "substatus": "delivered001"
+            },
+            {
+              "Date": "2021-01-26 17:48",
+              "StatusDescription": "Driver is en route",
               "Details": "NL",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-14 08:05",
-              "StatusDescription": "Shipment to be collected at PostNL retail point",
-              "Details": "NL",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-14 07:16",
-              "StatusDescription": "Driver is en route to PostNL retail point",
-              "Details": "NL",
-              "checkpoint_status": "transit",
-              "substatus": "transit001"
-            },
-            {
-              "Date": "2020-12-14 06:57",
+              "Date": "2021-01-26 17:19",
               "StatusDescription": "Shipment sorted",
               "Details": "NL",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-13 20:38",
+              "Date": "2021-01-26 03:00",
               "StatusDescription": "Shipment is at PostNL",
               "Details": "NL",
               "checkpoint_status": "transit",
               "substatus": "transit001"
             },
             {
-              "Date": "2020-12-13 19:05",
+              "Date": "2021-01-25 10:15",
+              "StatusDescription": "delivery delayed ",
+              "Details": "NL",
+              "checkpoint_status": "transit",
+              "substatus": "transit001"
+            },
+            {
+              "Date": "2021-01-24 21:26",
+              "StatusDescription": "Shipment is at PostNL",
+              "Details": "NL",
+              "checkpoint_status": "transit",
+              "substatus": "transit001"
+            },
+            {
+              "Date": "2021-01-24 21:23",
               "StatusDescription": "Shipment is expected, but not yet in sorting process",
               "Details": "",
               "checkpoint_status": "transit",
@@ -443,9 +290,9 @@
           "carrier_code": null,
           "trackinfo": null
         },
-        "lastEvent": "Shipment collected at PostNL retail point,NL,2020-12-14 14:34",
-        "lastUpdateTime": "2020-12-14 14:34"
-      }
+        "lastEvent": "Shipment delivered,NL,2021-01-26 22:35",
+        "lastUpdateTime": "2021-01-26 22:35"
+      }	   
     ]
   }
 }
