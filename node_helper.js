@@ -66,8 +66,11 @@ module.exports = NodeHelper.create({
 		
 		for (var i = 0; i < data.length; i++) {
 			if ( data[i].last_loc ) {
-				data[i].last_loc.info = transMap.get(data[i].last_loc.info) ;	
-				data[i].last_loc.details = transMap.get(data[i].last_loc.details) ;	
+				var tr;
+				tr = transMap.get(data[i].last_loc.info) ;
+				data[i].last_loc.info = tr?tr:data[i].last_loc.info;
+				tr = transMap.get(data[i].last_loc.details) ;
+				data[i].last_loc.details = tr?tr:data[i].last_loc.details ;	
 			}
 		}		
 	return data ;
