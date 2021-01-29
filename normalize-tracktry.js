@@ -4,6 +4,7 @@
 /* Martin Kooij 
 /* 2021
 /*******************************/
+var moment = require('moment');
 
 function normalize(rawList) {  // normalize for Tracktry Interface
 		const statMap = new Map();
@@ -34,12 +35,11 @@ function normalize(rawList) {  // normalize for Tracktry Interface
 				item.updated_time = rawItem.updated_at ;
 				item.expected_deliverytime = null ;
 				item.substatus = null ;
-				if (!(rawItem.origin_info)) {rawItem.origin_info = {trackinfo: null}} ;
-				if (!(rawItem.destination_info)) {rawItem.destination_info = {trackinfo: null}} ;
-				var rawLocList = (rawItem.destination_info.trackinfo || rawItem.origin_info.trackinfo) ;
-				if ( rawLocList ) {
-					const rawLoc = rawLocList[0] ;
-					lastLoc.time = adaptTime(item,rawLoc.Date) ; ;
+				const rawLoc_o = (rawItem.origin_info && rawItem.origin_info.trackinfo && rawItem.origin_info.trackinfo[0]) ;
+				const rawLoc_d = (rawItem.destination_info && rawItem.destination_info.trackinfo && rawItem.destination_info.trackinfo[0]) ;
+				const rawLoc = newest(rawLoc_o,rawLoc_d);
+				if (rawLoc) {
+					lastLoc.time = rawLoc.Date ;
 					lastLoc.info = rawLoc.StatusDescription.trim() ;
 					lastLoc.details = rawLoc.Details.trim() ;
 					item.substatus = rawLoc.substatus ;  // note that this is moved to toplayer
@@ -71,6 +71,15 @@ function adaptTime(item,t) {
 	}
 	return t // no adjustments known for other couriers
 }
+
+function newest(loc1,loc2) {
+	if (!loc1 && !loc2){ return null ;}
+	if (!loc1 && loc2) { return loc2 ;}
+	if (!loc2 && loc1) { return loc1 ;}
+	if (moment(loc1.Date) < moment(loc2.Date)) {return loc2;}
+	return loc1 ;
+}
+	
 
 module.exports = normalize ;
 
